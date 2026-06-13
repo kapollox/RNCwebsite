@@ -1,26 +1,98 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Fonts */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand - Primary */
+  --color-primary: #1a1a1a;
+  --color-primary-dark: #0d0d0d;
+
+  /* Brand - Accent (Performance Red) */
+  --color-accent: #e63946;
+  --color-accent-dark: #c1121f;
+
+  /* Surfaces */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f8fafc;
+  --color-surface-dark: #111827;
+
+  /* Borders */
+  --color-border: #e2e8f0;
+  --color-border-dark: #1f2937;
+
+  /* Text */
+  --color-text-base: #0b1c30;
+  --color-text-muted: #64748b;
+  --color-text-subtle: #94a3b8;
+
+  /* WhatsApp */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #128c7e;
+
+  /* Footer */
+  --color-footer-bg: #111111;
+  --color-footer-text: #a3a3a3;
+
+  /* Spacing */
+  --spacing-container: 1280px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Base styles */
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text-base);
+  background-color: var(--color-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Heading font override */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+}
+
+/* Utility: max container width */
+.container-main {
+  max-width: var(--spacing-container);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container-main {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (min-width: 1024px) {
+  .container-main {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+/* Hero technical grid pattern */
+.hero-grid-pattern {
+  background-color: #0d1117;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Catalog/spec number style */
+.part-number {
+  font-family: ui-monospace, "JetBrains Mono", "Fira Code", monospace;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
 }
