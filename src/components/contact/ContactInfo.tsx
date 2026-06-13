@@ -1,10 +1,13 @@
-import { Phone, MapPin, Clock, MessageCircle } from 'lucide-react';
+'use client';
 
-const WHATSAPP_URL = `https://wa.me/905XXXXXXXXX?text=${encodeURIComponent(
-  'Merhaba, Honda motosikletim için parça sorgulamak istiyorum. Model / yıl / parça adı bilgilerini paylaşacağım.'
-)}`;
+import { Phone, MapPin, Clock, MessageCircle } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export function ContactInfo() {
+  const { t } = useLanguage();
+
+  const whatsappUrl = `https://wa.me/905462096969?text=${encodeURIComponent(t('contact_wa_pretext'))}`;
+
   return (
     <div className="flex flex-col gap-5">
       {/* WhatsApp — primary card */}
@@ -15,22 +18,22 @@ export function ContactInfo() {
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-[10px] font-black tracking-[0.16em] uppercase text-white/40 mb-1.5 block">
-              ÖNCELİKLİ İLETİŞİM
+              {t('contact_priority_label')}
             </span>
             <h2 className="font-display font-bold text-white text-xl mb-2">
-              WhatsApp ile Hızlı Ulaşım
+              {t('contact_wa_title')}
             </h2>
             <p className="text-white/60 text-sm leading-relaxed mb-5">
-              Parça kodu, model bilgisi veya uyumluluk sorularınız için WhatsApp üzerinden hızlı ve net yanıt alabilirsiniz.
+              {t('contact_wa_desc')}
             </p>
             <a
-              href={WHATSAPP_URL}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-whatsapp text-white text-sm font-semibold rounded-sm hover:bg-whatsapp-dark transition-colors duration-150"
             >
               <MessageCircle size={16} />
-              WhatsApp&apos;ı Aç
+              {t('contact_wa_button')}
             </a>
           </div>
         </div>
@@ -44,13 +47,13 @@ export function ContactInfo() {
             <Phone size={16} className="text-primary" strokeWidth={1.5} />
           </div>
           <span className="text-[10px] font-black tracking-[0.14em] uppercase text-text-subtle mb-1.5 block">
-            TELEFON
+            {t('contact_phone_label')}
           </span>
           <a
-            href="tel:+90XXXXXXXXXX"
+            href="tel:+905462096969"
             className="text-primary font-semibold text-sm hover:text-accent transition-colors"
           >
-            0 (XXX) XXX XX XX
+            0 (546) 209 69 69
           </a>
         </div>
 
@@ -60,10 +63,10 @@ export function ContactInfo() {
             <MapPin size={16} className="text-primary" strokeWidth={1.5} />
           </div>
           <span className="text-[10px] font-black tracking-[0.14em] uppercase text-text-subtle mb-1.5 block">
-            ADRES
+            {t('contact_address_label')}
           </span>
           <p className="text-primary font-semibold text-sm leading-snug">
-            Adres bilgisi eklenecek
+            Şehitkamil / Gaziantep
           </p>
         </div>
 
@@ -73,12 +76,12 @@ export function ContactInfo() {
             <Clock size={16} className="text-primary" strokeWidth={1.5} />
           </div>
           <span className="text-[10px] font-black tracking-[0.14em] uppercase text-text-subtle mb-1.5 block">
-            ÇALIŞMA SAATLERİ
+            {t('contact_hours_label')}
           </span>
           <div className="text-sm space-y-0.5">
-            <p className="text-primary font-semibold">Hft içi: 09:00 – 18:00</p>
-            <p className="text-primary font-semibold">Cumartesi: 09:00 – 14:00</p>
-            <p className="text-text-muted">Pazar: Kapalı</p>
+            <p className="text-primary font-semibold">{t('contact_hours_weekday')}</p>
+            <p className="text-primary font-semibold">{t('contact_hours_saturday')}</p>
+            <p className="text-text-muted">{t('contact_hours_sunday')}</p>
           </div>
         </div>
       </div>

@@ -1,12 +1,17 @@
+'use client';
+
 import { Target, Eye } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export function AboutMissionVision() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-surface border-b border-border">
       <div className="container-main py-20">
         <div className="mb-12">
           <h2 className="font-display text-2xl md:text-[2rem] font-black text-primary tracking-tight">
-            Kurumsal Yaklaşım
+            {t('mission_section_title')}
           </h2>
         </div>
 
@@ -16,9 +21,9 @@ export function AboutMissionVision() {
             <div className="w-12 h-12 bg-surface-muted border border-border rounded-sm flex items-center justify-center mb-6">
               <Target size={22} className="text-primary" strokeWidth={1.5} />
             </div>
-            <h3 className="font-display font-bold text-primary text-xl mb-4">Misyonumuz</h3>
+            <h3 className="font-display font-bold text-primary text-xl mb-4">{t('mission_title')}</h3>
             <p className="text-text-muted leading-relaxed">
-              Motosiklet yedek parça tedariğinde doğru bilgi, güvenilir yönlendirme ve hızlı iletişimle müşterilerimizin ihtiyaç duyduğu parçaya en uygun şekilde ulaşmasını sağlamak. Model, yıl ve seri farklarını dikkate alarak her müşterimize özel ve güvenilir çözüm sunmak temel önceliğimizdir.
+              {t('mission_text')}
             </p>
           </div>
 
@@ -27,9 +32,9 @@ export function AboutMissionVision() {
             <div className="w-12 h-12 bg-surface-muted border border-border rounded-sm flex items-center justify-center mb-6">
               <Eye size={22} className="text-primary" strokeWidth={1.5} />
             </div>
-            <h3 className="font-display font-bold text-primary text-xl mb-4">Vizyonumuz</h3>
+            <h3 className="font-display font-bold text-primary text-xl mb-4">{t('vision_title')}</h3>
             <p className="text-text-muted leading-relaxed">
-              Honda motosiklet yedek parçalarında güvenilir, düzenli ve profesyonel tedarik anlayışıyla; servisler, ustalar, satıcılar ve bireysel kullanıcılar için tercih edilen çözüm ortağı olmak.
+              {t('vision_text')}
             </p>
           </div>
         </div>

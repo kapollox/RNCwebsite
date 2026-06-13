@@ -27,7 +27,7 @@ export default async function SubCategoryPage({ params }: PageProps) {
   if (!category || !subcategory) notFound();
 
   const whatsappMessage = `Merhaba, Honda motosikletim için ${subcategory.name} parçası sorgulamak istiyorum. Model ve yıl bilgilerimi paylaşacağım.`;
-  const whatsappUrl = `https://wa.me/905XXXXXXXXX?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = `https://wa.me/905462096969?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
     <>

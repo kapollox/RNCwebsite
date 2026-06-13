@@ -1,5 +1,9 @@
+'use client';
+
 import Link from 'next/link';
+import Image from 'next/image';
 import { Phone, MapPin, Clock, MessageCircle } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 const partLinks = [
   { href: '/parca-listesi/elektrik-grubu', label: 'Elektrik Grubu' },
@@ -10,13 +14,15 @@ const partLinks = [
   { href: '/parca-listesi/on-arka-teker-grubu', label: 'Teker Grubu' },
 ];
 
-const companyLinks = [
-  { href: '/hakkimizda', label: 'Hakkımızda' },
-  { href: '/iletisim', label: 'İletişim' },
-  { href: '/', label: 'Ana Sayfa' },
-];
-
 export function Footer() {
+  const { t } = useLanguage();
+
+  const companyLinks = [
+    { href: '/hakkimizda', label: t('footer_link_about') },
+    { href: '/iletisim', label: t('footer_link_contact') },
+    { href: '/', label: t('footer_link_home') },
+  ];
+
   return (
     <footer className="bg-footer-bg text-footer-text">
       {/* Main footer grid */}
@@ -24,33 +30,33 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand column */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <span className="flex items-center justify-center w-8 h-8 bg-accent text-white font-display font-black text-sm rounded-sm select-none">
-                R
-              </span>
-              <span className="font-display font-bold text-xl text-white tracking-tight">
-                NC Motor
-              </span>
+            <Link href="/" className="inline-flex items-center bg-black rounded-sm px-2 py-1 mb-4">
+              <Image
+                src="/images/logo/rnc-motor-logo.png"
+                alt="RNC Motor"
+                width={160}
+                height={44}
+                className="h-8 w-auto"
+              />
             </Link>
             <p className="text-sm leading-relaxed mb-6 max-w-xs">
-              Honda motosiklet yedek parçasında 10 yılı aşkın deneyim. Doğru
-              parça bilgisi, hızlı yönlendirme, güvenilir hizmet.
+              {t('footer_brand_desc')}
             </p>
             <a
-              href="https://wa.me/905XXXXXXXXX"
+              href="https://wa.me/905462096969"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-whatsapp text-white text-sm font-semibold rounded-sm hover:bg-whatsapp-dark transition-colors duration-150"
             >
               <MessageCircle size={16} />
-              WhatsApp ile Yazın
+              {t('footer_whatsapp')}
             </a>
           </div>
 
           {/* Parts column */}
           <div>
             <h4 className="text-white text-xs font-semibold tracking-[0.1em] uppercase mb-4">
-              Parça Kategorileri
+              {t('footer_parts_title')}
             </h4>
             <ul className="space-y-2.5">
               {partLinks.map((link) => (
@@ -69,7 +75,7 @@ export function Footer() {
           {/* Company column */}
           <div>
             <h4 className="text-white text-xs font-semibold tracking-[0.1em] uppercase mb-4">
-              Kurumsal
+              {t('footer_company_title')}
             </h4>
             <ul className="space-y-2.5">
               {companyLinks.map((link) => (
@@ -88,23 +94,23 @@ export function Footer() {
           {/* Contact column */}
           <div>
             <h4 className="text-white text-xs font-semibold tracking-[0.1em] uppercase mb-4">
-              İletişim
+              {t('footer_contact_title')}
             </h4>
             <ul className="space-y-3">
               <li className="flex items-start gap-2.5 text-sm">
                 <Phone size={15} className="mt-0.5 shrink-0 text-accent" />
-                <span>0 (XXX) XXX XX XX</span>
+                <span>0 (546) 209 69 69</span>
               </li>
               <li className="flex items-start gap-2.5 text-sm">
                 <MapPin size={15} className="mt-0.5 shrink-0 text-accent" />
-                <span>İstanbul, Türkiye</span>
+                <span>Şehitkamil / Gaziantep</span>
               </li>
               <li className="flex items-start gap-2.5 text-sm">
                 <Clock size={15} className="mt-0.5 shrink-0 text-accent" />
                 <span>
-                  Pzt – Cts: 09:00 – 18:00
+                  {t('footer_hours_weekday')}
                   <br />
-                  Pazar: Kapalı
+                  {t('footer_hours_sunday')}
                 </span>
               </li>
             </ul>
@@ -115,10 +121,8 @@ export function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-border-dark">
         <div className="container-main py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-          <p>© {new Date().getFullYear()} RNC Motor. Tüm hakları saklıdır.</p>
-          <p className="text-xs">
-            Honda motosiklet yedek parça kataloğu ve bilgi merkezi
-          </p>
+          <p>© {new Date().getFullYear()} RNC Motor. {t('footer_copyright')}</p>
+          <p className="text-xs">{t('footer_tagline')}</p>
         </div>
       </div>
     </footer>

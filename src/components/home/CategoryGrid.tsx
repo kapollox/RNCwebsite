@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
   Cog, CircleDot, Zap, Wind, Link as LinkIcon,
@@ -5,6 +7,7 @@ import {
 } from 'lucide-react';
 import { featuredCategories } from '@/data/categories';
 import { SectionHeader } from '@/components/ui/SectionHeader';
+import { useLanguage } from '@/context/LanguageContext';
 
 const iconMap: Record<string, React.ElementType> = {
   Cog,
@@ -16,21 +19,23 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 export function CategoryGrid() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-surface-muted border-b border-border">
       <div className="container-main py-16 md:py-20">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
           <SectionHeader
-            eyebrow="Parça Grupları"
-            title="Kategoriye Göre Parça Ara"
-            description="Honda motosikleti için aradığınız parça grubunu seçin."
+            eyebrow={t('cat_grid_eyebrow')}
+            title={t('cat_grid_title')}
+            description={t('cat_grid_desc')}
             className="mb-0"
           />
           <Link
             href="/parca-listesi"
             className="flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent-dark transition-colors whitespace-nowrap"
           >
-            Tüm Parça Grupları
+            {t('cat_grid_all')}
             <ArrowRight size={15} />
           </Link>
         </div>

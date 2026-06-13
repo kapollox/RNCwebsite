@@ -1,20 +1,23 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Menu, X, Phone } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const navLinks = [
-  { href: '/parca-listesi', label: 'Parça Listesi' },
-  { href: '/hakkimizda', label: 'Hakkımızda' },
-  { href: '/iletisim', label: 'İletişim' },
-];
+import { useLanguage } from '@/context/LanguageContext';
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const { locale, setLocale, t } = useLanguage();
+
+  const navLinks = [
+    { href: '/parca-listesi', label: t('nav_parts') },
+    { href: '/hakkimizda', label: t('nav_about') },
+    { href: '/iletisim', label: t('nav_contact') },
+  ];
 
   return (
     <header className="sticky top-0 z-50 bg-surface border-b border-border">
@@ -23,15 +26,17 @@ export function Navbar() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center gap-2 group"
+            className="flex items-center bg-black rounded-sm px-2 py-1"
             onClick={() => setMobileOpen(false)}
           >
-            <span className="flex items-center justify-center w-8 h-8 bg-accent text-white font-display font-black text-sm rounded-sm select-none">
-              R
-            </span>
-            <span className="font-display font-bold text-xl text-primary tracking-tight">
-              NC Motor
-            </span>
+            <Image
+              src="/images/logo/rnc-motor-logo.png"
+              alt="RNC Motor"
+              width={160}
+              height={44}
+              className="h-8 md:h-10 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -55,30 +60,52 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Desktop Right — Contact */}
+          {/* Desktop Right */}
           <div className="hidden md:flex items-center gap-3">
             <a
-              href="tel:+90XXXXXXXXXX"
+              href="tel:+905462096969"
               className="flex items-center gap-2 text-sm text-text-muted hover:text-primary transition-colors duration-150"
             >
               <Phone size={15} />
-              <span className="font-medium">0 (XXX) XXX XX XX</span>
+              <span className="font-medium">0 (546) 209 69 69</span>
             </a>
             <a
-              href="https://wa.me/905XXXXXXXXX"
+              href="https://wa.me/905462096969"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-white text-sm font-semibold rounded-sm hover:bg-accent-dark transition-colors duration-150"
             >
-              WhatsApp
+              {t('nav_whatsapp')}
             </a>
+            {/* Language toggle */}
+            <div className="flex items-center border border-border rounded-sm overflow-hidden">
+              <button
+                onClick={() => setLocale('tr')}
+                className={cn(
+                  'px-2.5 py-1 text-xs font-bold tracking-wide transition-colors duration-150',
+                  locale === 'tr' ? 'bg-primary text-white' : 'text-text-muted hover:text-primary'
+                )}
+              >
+                TR
+              </button>
+              <div className="w-px h-4 bg-border" />
+              <button
+                onClick={() => setLocale('en')}
+                className={cn(
+                  'px-2.5 py-1 text-xs font-bold tracking-wide transition-colors duration-150',
+                  locale === 'en' ? 'bg-primary text-white' : 'text-text-muted hover:text-primary'
+                )}
+              >
+                EN
+              </button>
+            </div>
           </div>
 
           {/* Mobile toggle */}
           <button
             className="md:hidden p-2 text-primary hover:text-accent transition-colors"
             onClick={() => setMobileOpen((prev) => !prev)}
-            aria-label={mobileOpen ? 'Menüyü kapat' : 'Menüyü aç'}
+            aria-label={mobileOpen ? t('nav_menu_close') : t('nav_menu_open')}
           >
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -109,20 +136,45 @@ export function Navbar() {
             })}
             <div className="pt-3 mt-2 border-t border-border flex flex-col gap-2">
               <a
-                href="tel:+90XXXXXXXXXX"
+                href="tel:+905462096969"
                 className="flex items-center gap-2 px-3 py-2 text-sm text-text-muted"
               >
                 <Phone size={15} />
-                0 (XXX) XXX XX XX
+                0 (546) 209 69 69
               </a>
               <a
-                href="https://wa.me/905XXXXXXXXX"
+                href="https://wa.me/905462096969"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 px-4 py-3 bg-accent text-white text-sm font-semibold rounded-sm hover:bg-accent-dark transition-colors"
               >
-                WhatsApp ile İletişim
+                {t('nav_whatsapp_mobile')}
               </a>
+              {/* Mobile language toggle */}
+              <div className="flex items-center justify-center gap-2 pt-1">
+                <button
+                  onClick={() => setLocale('tr')}
+                  className={cn(
+                    'px-4 py-2 text-xs font-bold rounded-sm border transition-colors duration-150',
+                    locale === 'tr'
+                      ? 'bg-primary text-white border-primary'
+                      : 'border-border text-text-muted hover:text-primary'
+                  )}
+                >
+                  TR
+                </button>
+                <button
+                  onClick={() => setLocale('en')}
+                  className={cn(
+                    'px-4 py-2 text-xs font-bold rounded-sm border transition-colors duration-150',
+                    locale === 'en'
+                      ? 'bg-primary text-white border-primary'
+                      : 'border-border text-text-muted hover:text-primary'
+                  )}
+                >
+                  EN
+                </button>
+              </div>
             </div>
           </nav>
         </div>

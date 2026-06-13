@@ -3,6 +3,7 @@ export interface SubCategory {
   name: string;
   slug: string;
   description?: string;
+  image?: string;
 }
 
 export interface Category {
@@ -12,6 +13,7 @@ export interface Category {
   description: string;
   partCount: number;
   iconName: string;
+  image?: string;
   featured: boolean;
   subcategories: SubCategory[];
 }

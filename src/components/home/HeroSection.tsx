@@ -1,14 +1,19 @@
-import Link from 'next/link';
-import { ArrowRight, ShieldCheck, Clock, Wrench } from 'lucide-react';
-import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
+'use client';
 
-const stats = [
-  { value: '10+', label: 'Yıl Deneyim' },
-  { value: '500+', label: 'Honda Parçası' },
-  { value: '7/24', label: 'WhatsApp Destek' },
-];
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
+import { useLanguage } from '@/context/LanguageContext';
 
 export function HeroSection() {
+  const { t } = useLanguage();
+
+  const stats = [
+    { value: '10+', label: t('hero_stat_experience') },
+    { value: '500+', label: t('hero_stat_parts') },
+    { value: '7/24', label: t('hero_stat_support') },
+  ];
+
   return (
     <section className="hero-grid-pattern relative overflow-hidden">
       {/* Red accent top bar */}
@@ -20,24 +25,22 @@ export function HeroSection() {
           <div className="flex items-center gap-2 mb-6">
             <span className="inline-block w-8 h-px bg-accent" />
             <span className="text-accent text-xs font-semibold tracking-[0.14em] uppercase">
-              Honda Yedek Parça Uzmanı
+              {t('hero_eyebrow')}
             </span>
           </div>
 
           {/* Heading */}
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.05] tracking-tight mb-6">
-            Honda Motosiklet
+            {t('hero_title1')}
             <br />
-            Yedek Parçada
+            {t('hero_title2')}
             <br />
-            <span className="text-accent">Güvenilir Çözüm.</span>
+            <span className="text-accent">{t('hero_title3')}</span>
           </h1>
 
           {/* Description */}
           <p className="text-slate-300 text-base md:text-lg leading-relaxed mb-10 max-w-xl">
-            10 yılı aşkın deneyimimiz ve Honda parça uzmanlığımızla doğru
-            parçayı doğru modele eşleştiriyoruz. Hızlı WhatsApp yanıtı,
-            güvenilir yönlendirme.
+            {t('hero_desc')}
           </p>
 
           {/* CTA Buttons */}
@@ -46,12 +49,12 @@ export function HeroSection() {
               href="/parca-listesi"
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white text-primary text-sm font-bold rounded-sm hover:bg-slate-100 transition-colors duration-150"
             >
-              Parça Kataloğunu İncele
+              {t('hero_cta_catalog')}
               <ArrowRight size={16} />
             </Link>
             <WhatsAppButton
               size="md"
-              label="WhatsApp ile Parça Sor"
+              label={t('hero_cta_whatsapp')}
               className="justify-center"
             />
           </div>

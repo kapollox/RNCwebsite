@@ -1,33 +1,35 @@
-import { Shield, Settings2, Users } from 'lucide-react';
+'use client';
 
-const values = [
-  {
-    icon: Shield,
-    label: 'GÜVENİLİR TEDARİK',
-    description:
-      'Yıllara dayanan sektör tecrübemizle, ihtiyaç duyulan parçaları doğru bilgiyle ve güvenilir yönlendirmeyle sunarız.',
-  },
-  {
-    icon: Settings2,
-    label: 'HONDA PARÇA UZMANLIĞI',
-    description:
-      'Honda motosiklet gruplarında model, yıl ve uyumluluk detaylarını dikkate alarak doğru parça seçimine destek oluruz.',
-  },
-  {
-    icon: Users,
-    label: 'PROFESYONEL HİZMET',
-    description:
-      'Servisler, ustalar, satıcılar ve bireysel kullanıcılar için hızlı iletişim, net bilgi ve çözüm odaklı destek sağlarız.',
-  },
-];
+import { Shield, Settings2, Users } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export function AboutValues() {
+  const { t } = useLanguage();
+
+  const values = [
+    {
+      icon: Shield,
+      label: t('values1_label'),
+      description: t('values1_desc'),
+    },
+    {
+      icon: Settings2,
+      label: t('values2_label'),
+      description: t('values2_desc'),
+    },
+    {
+      icon: Users,
+      label: t('values3_label'),
+      description: t('values3_desc'),
+    },
+  ];
+
   return (
     <section className="bg-surface-muted border-y border-border">
       <div className="container-main py-20">
         <div className="mb-12">
           <h2 className="font-display text-2xl md:text-[2rem] font-black text-primary tracking-tight">
-            Değerlerimiz
+            {t('values_section_title')}
           </h2>
         </div>
 

@@ -5,9 +5,11 @@ import { usePathname } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
 import { categories } from '@/data/categories';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/context/LanguageContext';
 
 export function CategorySidebar() {
   const pathname = usePathname();
+  const { t } = useLanguage();
   // Extract active category slug from path: /parca-listesi/[category]/...
   const segments = pathname.split('/').filter(Boolean);
   const activeCategorySlug = segments[1]; // index 0 = 'parca-listesi'
@@ -21,11 +23,11 @@ export function CategorySidebar() {
             <div className="flex items-center gap-2">
               <div className="w-0.5 h-3.5 bg-accent rounded-full" />
               <h3 className="text-[11px] font-black tracking-[0.12em] uppercase text-primary">
-                Ürün Grupları
+                {t('sidebar_title')}
               </h3>
             </div>
             <p className="text-[10px] text-text-subtle mt-1 ml-3.5">
-              {categories.length} kategori
+              {categories.length} {t('sidebar_count_suffix')}
             </p>
           </div>
           <nav className="space-y-0.5">
@@ -56,7 +58,7 @@ export function CategorySidebar() {
       {/* ── Mobile horizontal scroll ───────────────────── */}
       <div className="lg:hidden -mx-5 px-5 md:-mx-10 md:px-10 mb-6">
         <p className="text-[10px] font-bold tracking-[0.14em] uppercase text-text-subtle mb-2">
-          Ürün Grupları
+          {t('sidebar_title')}
         </p>
         <div className="overflow-x-auto pb-2">
           <div className="flex gap-2 w-max">
@@ -69,7 +71,7 @@ export function CategorySidebar() {
                   : 'border-border text-primary hover:border-primary bg-surface'
               )}
             >
-              Tümü
+              {t('sidebar_all')}
             </Link>
             {categories.map((cat) => {
               const isActive = activeCategorySlug === cat.slug;

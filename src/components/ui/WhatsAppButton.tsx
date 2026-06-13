@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { MessageCircle } from 'lucide-react';
 
-const WHATSAPP_NUMBER = '905XXXXXXXXX'; // Gerçek numara buraya girilecek
+const WHATSAPP_NUMBER = '905462096969'; // Gerçek numara buraya girilecek
 const DEFAULT_MESSAGE =
   'Merhaba, Honda motosikletim için parça sorgulamak istiyorum. Model / yıl / parça adı bilgilerini paylaşacağım.';
 

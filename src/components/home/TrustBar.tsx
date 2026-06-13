@@ -1,27 +1,29 @@
-import { Award, BookOpen, MessageCircle } from 'lucide-react';
+'use client';
 
-const trustItems = [
-  {
-    icon: Award,
-    title: '10+ Yıl Honda Deneyimi',
-    description:
-      'Honda motosiklet yedek parçası alanında on yılı aşkın sektör deneyimi.',
-  },
-  {
-    icon: BookOpen,
-    title: 'Doğru Parça Bilgisi',
-    description:
-      'Model ve seri numarasına göre doğru parçayı belirliyoruz; yanlış parça riski sıfır.',
-  },
-  {
-    icon: MessageCircle,
-    title: 'Hızlı WhatsApp Yanıtı',
-    description:
-      'Parça kodu, uyumluluk ve stok soruları için anında WhatsApp desteği.',
-  },
-];
+import { Award, BookOpen, MessageCircle } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export function TrustBar() {
+  const { t } = useLanguage();
+
+  const trustItems = [
+    {
+      icon: Award,
+      title: t('trust_title1'),
+      description: t('trust_desc1'),
+    },
+    {
+      icon: BookOpen,
+      title: t('trust_title2'),
+      description: t('trust_desc2'),
+    },
+    {
+      icon: MessageCircle,
+      title: t('trust_title3'),
+      description: t('trust_desc3'),
+    },
+  ];
+
   return (
     <section className="bg-surface border-b border-border">
       <div className="container-main py-12 md:py-16">

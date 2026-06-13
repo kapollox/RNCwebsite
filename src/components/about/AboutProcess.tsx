@@ -1,42 +1,44 @@
-import { Search, Package, MessageCircle } from 'lucide-react';
+'use client';
 
-const steps = [
-  {
-    phase: 'AŞAMA 01',
-    icon: Search,
-    title: 'Parça Bilgisi ve Uyumluluk',
-    description:
-      'Model, yıl, motor kodu ve seri farklarını dikkate alarak doğru parça grubunu belirlemeye odaklanırız. Yanlış parça seçimi zaman ve maliyet kaybına neden olur; bu yüzden doğru tanımlama her şeyin başıdır.',
-    accent: false,
-  },
-  {
-    phase: 'AŞAMA 02',
-    icon: Package,
-    title: 'Güvenilir Tedarik',
-    description:
-      'Sektör deneyimimiz ve parça bilgimizle müşterilerimize güvenilir ürün yönlendirmesi ve düzenli tedarik desteği sunarız. Çalıştığımız ürün gruplarını iyi tanır, uyumluluk sorularına net yanıt veririz.',
-    accent: false,
-  },
-  {
-    phase: 'AŞAMA 03',
-    icon: MessageCircle,
-    title: 'Hızlı İletişim',
-    description:
-      'Parça kodu, uyumluluk ve stok soruları için WhatsApp üzerinden hızlı ve net iletişim kurarız. Teknik desteğimiz yalnızca satış öncesiyle sınırlı değildir; alım sonrası da yanınızdayız.',
-    accent: true,
-  },
-];
+import { Search, Package, MessageCircle } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export function AboutProcess() {
+  const { t } = useLanguage();
+
+  const steps = [
+    {
+      phase: t('process_phase1'),
+      icon: Search,
+      title: t('process_step1_title'),
+      description: t('process_step1_desc'),
+      accent: false,
+    },
+    {
+      phase: t('process_phase2'),
+      icon: Package,
+      title: t('process_step2_title'),
+      description: t('process_step2_desc'),
+      accent: false,
+    },
+    {
+      phase: t('process_phase3'),
+      icon: MessageCircle,
+      title: t('process_step3_title'),
+      description: t('process_step3_desc'),
+      accent: true,
+    },
+  ];
+
   return (
     <section className="bg-surface-muted border-y border-border">
       <div className="container-main py-20">
         <div className="mb-14">
           <h2 className="font-display text-2xl md:text-[2rem] font-black text-primary tracking-tight">
-            Çalışma Prensibimiz
+            {t('process_section_title')}
           </h2>
           <p className="text-text-muted mt-2 leading-relaxed max-w-xl">
-            Doğru parça tedariği yalnızca ürün bulmak değildir; model, yıl, seri ve uyumluluk bilgisini doğru analiz etmeyi gerektirir.
+            {t('process_section_desc')}
           </p>
         </div>
 

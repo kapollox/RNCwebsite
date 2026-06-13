@@ -4,6 +4,7 @@ import './globals.css';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { WhatsAppFloatingButton } from '@/components/ui/WhatsAppButton';
+import { LanguageProvider } from '@/context/LanguageContext';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -47,10 +48,12 @@ export default function RootLayout({
       className={`${inter.variable} ${hankenGrotesk.variable}`}
     >
       <body className="min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <WhatsAppFloatingButton />
+        <LanguageProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <WhatsAppFloatingButton />
+        </LanguageProvider>
       </body>
     </html>
   );

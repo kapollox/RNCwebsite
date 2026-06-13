@@ -8,12 +8,13 @@ export const categories: Category[] = [
     description: 'Far, stop lambası, sinyal grubu ve LED/ampul parçaları',
     partCount: 72,
     iconName: 'Lightbulb',
+    image: '/images/categories/aydinlatma-grubu.jpg',
     featured: false,
     subcategories: [
-      { id: 'far-grubu', name: 'Far Grubu', slug: 'far-grubu', description: 'Ön far, arka far ve far yansıtıcı parçaları' },
-      { id: 'stop-lambasi', name: 'Stop Lambası', slug: 'stop-lambasi', description: 'Arka stop ve fren lambası parçaları' },
-      { id: 'sinyal-grubu', name: 'Sinyal Grubu', slug: 'sinyal-grubu', description: 'Ön-arka sinyal ve flaşör parçaları' },
-      { id: 'ampul-ve-led', name: 'Ampul ve LED', slug: 'ampul-ve-led', description: 'Halojen ampul ve LED dönüşüm setleri' },
+      { id: 'far-grubu', name: 'Far Grubu', slug: 'far-grubu', description: 'Ön far, arka far ve far yansıtıcı parçaları', image: '/images/subcategories/aydinlatma-grubu/far.jpg' },
+      { id: 'stop-lambasi', name: 'Stop Lambası', slug: 'stop-lambasi', description: 'Arka stop ve fren lambası parçaları', image: '/images/subcategories/aydinlatma-grubu/stop-lambasi.jpg' },
+      { id: 'sinyal-grubu', name: 'Sinyal Grubu', slug: 'sinyal-grubu', description: 'Ön-arka sinyal ve flaşör parçaları', image: '/images/subcategories/aydinlatma-grubu/sinyal-grubu.jpg' },
+      { id: 'ampul-ve-led', name: 'Ampul ve LED', slug: 'ampul-ve-led', description: 'Halojen ampul ve LED dönüşüm setleri', image: '/images/subcategories/aydinlatma-grubu/ampul-led.jpg' },
     ],
   },
   {
@@ -23,11 +24,12 @@ export const categories: Category[] = [
     description: 'Sürücü ve yolcu basamakları, basamak kauçukları ve bağlantı parçaları',
     partCount: 28,
     iconName: 'MoveVertical',
+    image: '/images/categories/basamaklar.jpg',
     featured: false,
     subcategories: [
-      { id: 'surucu-basamagi', name: 'Sürücü Basamağı', slug: 'surucu-basamagi' },
-      { id: 'yolcu-basamagi', name: 'Yolcu Basamağı', slug: 'yolcu-basamagi' },
-      { id: 'basamak-kaucugu', name: 'Basamak Kauçuğu', slug: 'basamak-kaucugu' },
+      { id: 'surucu-basamagi', name: 'Sürücü Basamağı', slug: 'surucu-basamagi', image: '/images/subcategories/basamaklar/surucu-basamagi.jpg' },
+      { id: 'yolcu-basamagi', name: 'Yolcu Basamağı', slug: 'yolcu-basamagi', image: '/images/subcategories/basamaklar/yolcu-basamagi.jpg' },
+      { id: 'basamak-kaucugu', name: 'Basamak Kauçuğu', slug: 'basamak-kaucugu', image: '/images/subcategories/basamaklar/basamak-kaucugu.jpg' },
     ],
   },
   {
@@ -37,12 +39,13 @@ export const categories: Category[] = [
     description: 'Grenaj, çamurluk, depo kapağı ve tüm dış plastik kaporta parçaları',
     partCount: 95,
     iconName: 'Shield',
+    image: '/images/categories/dis-aksam.jpg',
     featured: false,
     subcategories: [
-      { id: 'grenaj', name: 'Grenaj', slug: 'grenaj', description: 'Sağ-sol grenaj ve alt grenaj parçaları' },
-      { id: 'camurluk', name: 'Çamurluk', slug: 'camurluk', description: 'Ön ve arka çamurluk parçaları' },
-      { id: 'depo-kapagi', name: 'Depo Kapağı', slug: 'depo-kapagi', description: 'Depo üst kapak ve menteşe parçaları' },
-      { id: 'yan-panel', name: 'Yan Panel', slug: 'yan-panel', description: 'Sol ve sağ yan panel parçaları' },
+      { id: 'grenaj', name: 'Grenaj', slug: 'grenaj', description: 'Sağ-sol grenaj ve alt grenaj parçaları', image: '/images/subcategories/dis-aksam/grenaj.jpg' },
+      { id: 'camurluk', name: 'Çamurluk', slug: 'camurluk', description: 'Ön ve arka çamurluk parçaları', image: '/images/subcategories/dis-aksam/camurluk.jpg' },
+      { id: 'depo-kapagi', name: 'Depo Kapağı', slug: 'depo-kapagi', description: 'Depo üst kapak ve menteşe parçaları', image: '/images/subcategories/dis-aksam/depo-kapagi.jpg' },
+      { id: 'yan-panel', name: 'Yan Panel', slug: 'yan-panel', description: 'Sol ve sağ yan panel parçaları', image: '/images/subcategories/dis-aksam/yan-panel.jpg' },
     ],
   },
   {
@@ -52,11 +55,12 @@ export const categories: Category[] = [
     description: 'Şanzıman dişlileri, hız dişlileri ve aktarma organları',
     partCount: 44,
     iconName: 'Settings2',
+    image: '/images/categories/disliler.jpg',
     featured: false,
     subcategories: [
-      { id: 'sanziman-dislisi', name: 'Şanzıman Dişlisi', slug: 'sanziman-dislisi' },
-      { id: 'hiz-dislisi', name: 'Hız Dişlisi', slug: 'hiz-dislisi' },
-      { id: 'devirdaim-dislisi', name: 'Devirdaim Dişlisi', slug: 'devirdaim-dislisi' },
+      { id: 'sanziman-dislisi', name: 'Şanzıman Dişlisi', slug: 'sanziman-dislisi', image: '/images/subcategories/disliler/sanziman-dislisi.jpg' },
+      { id: 'hiz-dislisi', name: 'Hız Dişlisi', slug: 'hiz-dislisi', image: '/images/subcategories/disliler/hiz-dislisi.jpg' },
+      { id: 'devirdaim-dislisi', name: 'Devirdaim Dişlisi', slug: 'devirdaim-dislisi', image: '/images/subcategories/disliler/aktarma-dislisi.jpg' },
     ],
   },
   {
@@ -66,13 +70,14 @@ export const categories: Category[] = [
     description: 'Akü, ateşleme bobini, konjektör, marş motoru ve kablo tesisatı',
     partCount: 98,
     iconName: 'Zap',
+    image: '/images/categories/elektrik-grubu.jpg',
     featured: true,
     subcategories: [
-      { id: 'aku', name: 'Akü', slug: 'aku', description: 'AGM ve MF kapalı bakımsız akü çeşitleri' },
-      { id: 'atesleme-bobini', name: 'Ateşleme Bobini', slug: 'atesleme-bobini', description: 'Yüksek voltaj bobini ve ateşleme parçaları' },
-      { id: 'konjektur', name: 'Konjektör', slug: 'konjektur', description: 'EFI yakıt enjektörü ve konjektör parçaları' },
-      { id: 'mars-motoru', name: 'Marş Motoru', slug: 'mars-motoru', description: 'Elektrikli marş motoru ve dişli parçaları' },
-      { id: 'kablo-tesisati', name: 'Kablo Tesisatı', slug: 'kablo-tesisati', description: 'Ana kablo demeti ve bağlantı konektörleri' },
+      { id: 'aku', name: 'Akü', slug: 'aku', description: 'AGM ve MF kapalı bakımsız akü çeşitleri', image: '/images/subcategories/elektrik-grubu/aku.jpg' },
+      { id: 'atesleme-bobini', name: 'Ateşleme Bobini', slug: 'atesleme-bobini', description: 'Yüksek voltaj bobini ve ateşleme parçaları', image: '/images/subcategories/elektrik-grubu/atesleme-bobini.jpg' },
+      { id: 'konjektur', name: 'Konjektör', slug: 'konjektur', description: 'EFI yakıt enjektörü ve konjektör parçaları', image: '/images/subcategories/elektrik-grubu/konjektor.jpg' },
+      { id: 'mars-motoru', name: 'Marş Motoru', slug: 'mars-motoru', description: 'Elektrikli marş motoru ve dişli parçaları', image: '/images/subcategories/elektrik-grubu/mars-motoru.jpg' },
+      { id: 'kablo-tesisati', name: 'Kablo Tesisatı', slug: 'kablo-tesisati', description: 'Ana kablo demeti ve bağlantı konektörleri', image: '/images/subcategories/elektrik-grubu/elektrik-tesisati.jpg' },
     ],
   },
   {
@@ -82,11 +87,12 @@ export const categories: Category[] = [
     description: 'Egzoz borusu, egzoz contası ve bağlantı aparatları',
     partCount: 52,
     iconName: 'Wind',
+    image: '/images/categories/egzoz-grubu.jpg',
     featured: true,
     subcategories: [
-      { id: 'egzoz', name: 'Egzoz', slug: 'egzoz', description: 'Egzoz borusu, susturucu ve egzoz seti' },
-      { id: 'egzoz-contasi', name: 'Egzoz Contası', slug: 'egzoz-contasi', description: 'Manifold ve bağlantı conta parçaları' },
-      { id: 'egzoz-baglanti-aparatlari', name: 'Egzoz Bağlantı Aparatları', slug: 'egzoz-baglanti-aparatlari', description: 'Egzoz kelepçe, cıvata ve bağlantı parçaları' },
+      { id: 'egzoz', name: 'Egzoz', slug: 'egzoz', description: 'Egzoz borusu, susturucu ve egzoz seti', image: '/images/subcategories/egzoz-grubu/egzoz-borusu.jpg' },
+      { id: 'egzoz-contasi', name: 'Egzoz Contası', slug: 'egzoz-contasi', description: 'Manifold ve bağlantı conta parçaları', image: '/images/subcategories/egzoz-grubu/egzoz-contasi.jpg' },
+      { id: 'egzoz-baglanti-aparatlari', name: 'Egzoz Bağlantı Aparatları', slug: 'egzoz-baglanti-aparatlari', description: 'Egzoz kelepçe, cıvata ve bağlantı parçaları', image: '/images/subcategories/egzoz-grubu/baglanti-aparatlari.jpg' },
     ],
   },
   {
@@ -96,11 +102,12 @@ export const categories: Category[] = [
     description: 'Fren diski, balata seti, disk tepsisi ve hidrolik sistem parçaları',
     partCount: 86,
     iconName: 'CircleDot',
+    image: '/images/categories/fren-balata-grubu.jpg',
     featured: true,
     subcategories: [
-      { id: 'disk-balatasi', name: 'Disk Balatası', slug: 'disk-balatasi', description: 'Hidrolik disk fren balata setleri' },
-      { id: 'fren-balatasi', name: 'Fren Balatası', slug: 'fren-balatasi', description: 'Kampana ve mekanik fren balatası' },
-      { id: 'disk-tepsisi', name: 'Disk Tepsisi', slug: 'disk-tepsisi', description: 'Ön ve arka fren diski, rotor parçaları' },
+      { id: 'disk-balatasi', name: 'Disk Balatası', slug: 'disk-balatasi', description: 'Hidrolik disk fren balata setleri', image: '/images/subcategories/fren-balata-grubu/fren-diski.jpg' },
+      { id: 'fren-balatasi', name: 'Fren Balatası', slug: 'fren-balatasi', description: 'Kampana ve mekanik fren balatası', image: '/images/subcategories/fren-balata-grubu/balata-seti.jpg' },
+      { id: 'disk-tepsisi', name: 'Disk Tepsisi', slug: 'disk-tepsisi', description: 'Ön ve arka fren diski, rotor parçaları', image: '/images/subcategories/fren-balata-grubu/hidrolik-sistemi.jpg' },
     ],
   },
   {
@@ -110,11 +117,12 @@ export const categories: Category[] = [
     description: 'Gidon, gidon kauçuğu, gidon tutacağı ve direksiyon parçaları',
     partCount: 36,
     iconName: 'SlidersHorizontal',
+    image: '/images/categories/gidon-aksamlari.jpg',
     featured: false,
     subcategories: [
-      { id: 'gidon', name: 'Gidon', slug: 'gidon', description: 'Standart ve yüksek gidon parçaları' },
-      { id: 'gidon-kaucugu', name: 'Gidon Kauçuğu', slug: 'gidon-kaucugu', description: 'Sol-sağ gidon kauçuğu ve tutacakları' },
-      { id: 'direksiyon-kolu', name: 'Direksiyon Kolu', slug: 'direksiyon-kolu', description: 'Fren ve debriyaj kolu parçaları' },
+      { id: 'gidon', name: 'Gidon', slug: 'gidon', description: 'Standart ve yüksek gidon parçaları', image: '/images/subcategories/gidon-aksamlari/gidon.jpg' },
+      { id: 'gidon-kaucugu', name: 'Gidon Kauçuğu', slug: 'gidon-kaucugu', description: 'Sol-sağ gidon kauçuğu ve tutacakları', image: '/images/subcategories/gidon-aksamlari/gidon-kaucugu.jpg' },
+      { id: 'direksiyon-kolu', name: 'Direksiyon Kolu', slug: 'direksiyon-kolu', description: 'Fren ve debriyaj kolu parçaları', image: '/images/subcategories/gidon-aksamlari/gidon-tutacagi.jpg' },
     ],
   },
   {
@@ -124,11 +132,12 @@ export const categories: Category[] = [
     description: 'Analog ve dijital gösterge, kilometre sensörü ve kadran parçaları',
     partCount: 24,
     iconName: 'Gauge',
+    image: '/images/categories/kilometre-saatleri.jpg',
     featured: false,
     subcategories: [
-      { id: 'analog-gosterge', name: 'Analog Gösterge', slug: 'analog-gosterge', description: 'Mekanik kilometreci ve devir göstergesi' },
-      { id: 'dijital-gosterge', name: 'Dijital Gösterge', slug: 'dijital-gosterge', description: 'LCD ve dijital kombine göstergeler' },
-      { id: 'kilometre-sensoru', name: 'Kilometre Sensörü', slug: 'kilometre-sensoru', description: 'Hall sensör ve kablo parçaları' },
+      { id: 'analog-gosterge', name: 'Analog Gösterge', slug: 'analog-gosterge', description: 'Mekanik kilometreci ve devir göstergesi', image: '/images/subcategories/kilometre-saatleri/kilometre-saati.jpg' },
+      { id: 'dijital-gosterge', name: 'Dijital Gösterge', slug: 'dijital-gosterge', description: 'LCD ve dijital kombine göstergeler', image: '/images/subcategories/kilometre-saatleri/gosterge-sensoru.jpg' },
+      { id: 'kilometre-sensoru', name: 'Kilometre Sensörü', slug: 'kilometre-sensoru', description: 'Hall sensör ve kablo parçaları', image: '/images/subcategories/kilometre-saatleri/kadran.jpg' },
     ],
   },
   {
@@ -138,6 +147,7 @@ export const categories: Category[] = [
     description: 'Kontak kilidi, depo kapağı kilidi, koltuk kilidi ve anahtar setleri',
     partCount: 31,
     iconName: 'Lock',
+    image: '/images/categories/kilitler.jpg',
     featured: false,
     subcategories: [
       { id: 'kontak-kilidi', name: 'Kontak Kilidi', slug: 'kontak-kilidi', description: 'Kontak anahtarı ve kilit silindiri' },
@@ -152,10 +162,11 @@ export const categories: Category[] = [
     description: 'Motor koruyucu, karter koruması ve koruma plastiği parçaları',
     partCount: 19,
     iconName: 'ShieldCheck',
+    image: '/images/categories/koruma-ekipmanlari.jpg',
     featured: false,
     subcategories: [
-      { id: 'motor-koruyucu', name: 'Motor Koruyucu', slug: 'motor-koruyucu', description: 'Alt motor ve karter koruma plakaları' },
-      { id: 'el-korumaligi', name: 'El Korumalığı', slug: 'el-korumaligi', description: 'Gidon el koruyucu parçaları' },
+      { id: 'motor-koruyucu', name: 'Motor Koruyucu', slug: 'motor-koruyucu', description: 'Alt motor ve karter koruma plakaları', image: '/images/subcategories/koruma-ekipmanlari/motor-koruyucu.jpg' },
+      { id: 'el-korumaligi', name: 'El Korumalığı', slug: 'el-korumaligi', description: 'Gidon el koruyucu parçaları', image: '/images/subcategories/koruma-ekipmanlari/karter-korumasi.jpg' },
     ],
   },
   {
@@ -165,6 +176,7 @@ export const categories: Category[] = [
     description: 'Piston, segman, silindir, conta takımı ve supap parçaları',
     partCount: 124,
     iconName: 'Cog',
+    image: '/images/categories/motor-aksami.jpg',
     featured: true,
     subcategories: [
       { id: 'piston', name: 'Piston', slug: 'piston', description: 'Standart ve oversize piston setleri' },
@@ -181,6 +193,7 @@ export const categories: Category[] = [
     description: 'Ayna, tutucu, çanta taşıyıcı ve motosiklet aksesuar parçaları',
     partCount: 47,
     iconName: 'Package',
+    image: '/images/categories/motosiklet-aksesuarlari.jpg',
     featured: false,
     subcategories: [
       { id: 'dikiz-aynasi', name: 'Dikiz Aynası', slug: 'dikiz-aynasi', description: 'Sol-sağ dikiz aynası ve bağlantı parçaları' },
@@ -195,6 +208,7 @@ export const categories: Category[] = [
     description: 'Gaz teli, debriyaj teli, fren teli ve gösterge telleri',
     partCount: 38,
     iconName: 'Cable',
+    image: '/images/categories/motosiklet-telleri.jpg',
     featured: false,
     subcategories: [
       { id: 'gaz-teli', name: 'Gaz Teli', slug: 'gaz-teli', description: 'Kelebek gaz kablosu ve tel setleri' },
@@ -210,6 +224,7 @@ export const categories: Category[] = [
     description: 'Jant, rulman, aks mili ve teker bağlantı parçaları',
     partCount: 63,
     iconName: 'Circle',
+    image: '/images/categories/on-arka-teker-grubu.jpg',
     featured: true,
     subcategories: [
       { id: 'jant', name: 'Jant', slug: 'jant', description: 'Ön ve arka jant parçaları' },
@@ -225,6 +240,7 @@ export const categories: Category[] = [
     description: 'Fren pedalı, vites pedalı, yan sehpa ve merkez sehpa parçaları',
     partCount: 29,
     iconName: 'MoveDown',
+    image: '/images/categories/pedal-ve-sehpa.jpg',
     featured: false,
     subcategories: [
       { id: 'fren-pedali', name: 'Fren Pedalı', slug: 'fren-pedali', description: 'Arka fren pedal kolu ve parçaları' },
@@ -240,6 +256,7 @@ export const categories: Category[] = [
     description: 'Conta sökme takımı, piston ring kompresörü ve özel servis aparatları',
     partCount: 16,
     iconName: 'Wrench',
+    image: '/images/categories/tamir-aparatlari.jpg',
     featured: false,
     subcategories: [
       { id: 'piston-aparati', name: 'Piston Aparatı', slug: 'piston-aparati', description: 'Piston ring kompresörü ve montaj aparatları' },
@@ -254,6 +271,7 @@ export const categories: Category[] = [
     description: 'Tahrik zinciri, ön-arka dişli ve komple zincir dişli seti',
     partCount: 71,
     iconName: 'Link',
+    image: '/images/categories/zincirler-ve-zincir-disli-setleri.jpg',
     featured: true,
     subcategories: [
       { id: 'zincir', name: 'Zincir', slug: 'zincir', description: '420, 428, 520, 525, 530 pitch tahrik zincirleri' },
@@ -269,6 +287,7 @@ export const categories: Category[] = [
     description: 'Bakım setleri, conta takımları ve komple yenileme kitleri',
     partCount: 22,
     iconName: 'Star',
+    image: '/images/categories/avantajli-set-urunler.jpg',
     featured: false,
     subcategories: [
       { id: 'bakim-seti', name: 'Bakım Seti', slug: 'bakim-seti', description: 'Periyodik bakım parça setleri' },

@@ -1,7 +1,12 @@
+'use client';
+
 import { Phone, MapPin, MessageCircle, ArrowRight } from 'lucide-react';
 import { WhatsAppButton } from '@/components/ui/WhatsAppButton';
+import { useLanguage } from '@/context/LanguageContext';
 
 export function ContactCTA() {
+  const { t } = useLanguage();
+
   return (
     <section className="bg-primary">
       {/* Red accent top line */}
@@ -12,29 +17,28 @@ export function ContactCTA() {
           {/* Left: CTA text */}
           <div>
             <p className="text-accent text-xs font-semibold tracking-[0.12em] uppercase mb-4">
-              İletişim
+              {t('cta_eyebrow')}
             </p>
             <h2 className="font-display text-3xl md:text-4xl font-black text-white leading-tight tracking-tight mb-5">
-              Aradığınız Honda Parçasını
+              {t('cta_title_line1')}
               <br />
-              Birlikte Bulalım.
+              {t('cta_title_line2')}
             </h2>
             <p className="text-slate-400 text-base leading-relaxed mb-8 max-w-md">
-              Model adı, yıl bilgisi veya parça kodunuzla WhatsApp'tan yazın.
-              Parça uyumluluğunu kontrol edip en kısa sürede geri dönüyoruz.
+              {t('cta_desc')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
               <WhatsAppButton
                 size="lg"
-                label="Şimdi WhatsApp'tan Yazın"
+                label={t('cta_whatsapp')}
                 className="justify-center sm:justify-start"
               />
               <a
                 href="/iletisim"
                 className="inline-flex items-center justify-center gap-2 px-7 py-4 border border-slate-700 text-slate-300 text-sm font-semibold rounded-sm hover:bg-slate-800 hover:text-white transition-colors duration-150"
               >
-                İletişim Sayfası
+                {t('cta_contact_page')}
                 <ArrowRight size={15} />
               </a>
             </div>
@@ -43,7 +47,7 @@ export function ContactCTA() {
           {/* Right: Contact info */}
           <div className="bg-surface-dark rounded-sm border border-border-dark p-8">
             <h3 className="font-display font-bold text-white text-sm mb-6 uppercase tracking-widest">
-              İletişim Bilgileri
+              {t('cta_info_title')}
             </h3>
             <ul className="space-y-5">
               <li className="flex items-start gap-4">
@@ -52,13 +56,13 @@ export function ContactCTA() {
                 </div>
                 <div>
                   <p className="text-slate-400 text-xs uppercase tracking-wide mb-1">
-                    WhatsApp
+                    {t('cta_wa_label')}
                   </p>
                   <p className="text-white text-sm font-medium">
-                    0 (XXX) XXX XX XX
+                    0 (546) 209 69 69
                   </p>
                   <p className="text-slate-500 text-xs mt-0.5">
-                    Pzt – Cts 09:00 – 18:00
+                    {t('cta_wa_hours')}
                   </p>
                 </div>
               </li>
@@ -68,13 +72,13 @@ export function ContactCTA() {
                 </div>
                 <div>
                   <p className="text-slate-400 text-xs uppercase tracking-wide mb-1">
-                    Telefon
+                    {t('cta_phone_label')}
                   </p>
                   <a
-                    href="tel:+90XXXXXXXXXX"
+                    href="tel:+905462096969"
                     className="text-white text-sm font-medium hover:text-accent transition-colors"
                   >
-                    0 (XXX) XXX XX XX
+                    0 (546) 209 69 69
                   </a>
                 </div>
               </li>
@@ -84,10 +88,10 @@ export function ContactCTA() {
                 </div>
                 <div>
                   <p className="text-slate-400 text-xs uppercase tracking-wide mb-1">
-                    Konum
+                    {t('cta_location_label')}
                   </p>
                   <p className="text-white text-sm font-medium">
-                    İstanbul, Türkiye
+                    Şehitkamil / Gaziantep
                   </p>
                 </div>
               </li>
