@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import { supabase } from '@/lib/supabase';
 
 const WHATSAPP_NUMBER = '905462096969';
 
@@ -12,8 +13,15 @@ export function ContactForm() {
   const [message, setMessage] = useState('');
   const { t } = useLanguage();
 
-  const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSend = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Log inquiry to Supabase (fire-and-forget, does not block WhatsApp redirect)
+    supabase
+      .from('inquiries')
+      .insert({ name: name || null, honda_model: model || null, message })
+      .then(() => {});
+
     const lines = [
       t('form_wa_intro'),
       name && `${t('form_wa_name_prefix')}${name}`,
