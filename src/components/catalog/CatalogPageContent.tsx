@@ -2,6 +2,7 @@
 
 import { CategoryTile } from '@/components/catalog/CategoryTile';
 import { useLanguage } from '@/context/LanguageContext';
+import { getCatName, getCatDescription } from '@/lib/category-utils';
 import type { Category } from '@/types';
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export function CatalogPageContent({ categories }: Props) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
 
   return (
     <>
@@ -26,12 +27,12 @@ export function CatalogPageContent({ categories }: Props) {
         {categories.map((cat) => (
           <CategoryTile
             key={cat.id}
-            name={cat.name}
+            name={getCatName(cat, locale)}
             href={`/parca-listesi/${cat.slug}`}
             iconName={cat.iconName}
             image={cat.image}
             badge={`${cat.subcategories.length} ${t('catalog_badge_sub')}`}
-            description={cat.description}
+            description={getCatDescription(cat, locale)}
           />
         ))}
       </div>

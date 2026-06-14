@@ -15,6 +15,7 @@ export default function AdminLoginPage() {
     const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
     if (password === adminPassword) {
       sessionStorage.setItem('rnc-admin', '1');
+      sessionStorage.setItem('rnc-admin-token', password);
       router.push('/admin');
     } else {
       setError('Şifre hatalı.');

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Loader2, AlertCircle } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { adminFetchProduct } from '@/lib/admin-api';
 import { ProductForm } from '@/components/admin/ProductForm';
 import type { Product } from '@/types/product';
 
@@ -16,19 +16,10 @@ export default function UrunDuzenlemePage() {
 
   useEffect(() => {
     if (!id) return;
-    supabase
-      .from('products')
-      .select('*')
-      .eq('id', id)
-      .single()
-      .then(({ data, error }) => {
-        if (error || !data) {
-          setError('Ürün bulunamadı.');
-        } else {
-          setProduct(data);
-        }
-        setLoading(false);
-      });
+    adminFetchProduct(id)
+      .then(setProduct)
+      .catch(() => setError('Ürün bulunamadı.'))
+      .finally(() => setLoading(false));
   }, [id]);
 
   if (loading) {

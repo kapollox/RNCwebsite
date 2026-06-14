@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Upload, X, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { adminCreateProduct, adminUpdateProduct } from '@/lib/admin-api';
 import { categories } from '@/data/categories';
 import type { Product } from '@/types/product';
 
@@ -12,20 +13,6 @@ interface ProductFormProps {
   initial?: Partial<Product>;
   mode: 'create' | 'edit';
 }
-
-const emptyForm = {
-  name_tr: '',
-  name_en: '',
-  slug: '',
-  category_id: '',
-  subcategory_id: '',
-  price: '',
-  stock: '0',
-  description_tr: '',
-  description_en: '',
-  compatible_models: '',
-  is_active: true,
-};
 
 export function ProductForm({ initial, mode }: ProductFormProps) {
   const router = useRouter();
@@ -53,7 +40,6 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
   const set = (field: string, value: string | boolean) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 
-  // Slug otomatik oluştur
   const handleNameTr = (val: string) => {
     set('name_tr', val);
     if (mode === 'create') {
@@ -71,7 +57,6 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
   const selectedCategory = categories.find((c) => c.id === form.category_id);
   const subcategories = selectedCategory?.subcategories ?? [];
 
-  // Görsel yükleme
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -122,21 +107,18 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
       is_active: form.is_active,
     };
 
-    let dbError;
-    if (mode === 'create') {
-      ({ error: dbError } = await supabase.from('products').insert(payload));
-    } else {
-      ({ error: dbError } = await supabase.from('products').update(payload).eq('id', initial!.id));
-    }
-
-    if (dbError) {
-      setError(dbError.message);
+    try {
+      if (mode === 'create') {
+        await adminCreateProduct(payload);
+      } else {
+        await adminUpdateProduct(initial!.id!, payload);
+      }
+      router.push('/admin');
+      router.refresh();
+    } catch (e) {
+      setError((e as Error).message);
       setSaving(false);
-      return;
     }
-
-    router.push('/admin');
-    router.refresh();
   };
 
   const inputCls = 'w-full px-3.5 py-2.5 text-sm border border-border rounded-sm bg-surface text-primary placeholder:text-text-subtle focus:outline-none focus:border-primary transition-colors';
@@ -150,7 +132,6 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
         </div>
       )}
 
-      {/* Türkçe / İngilizce adlar */}
       <section className="bg-surface border border-border rounded-sm p-6 space-y-4">
         <h2 className="font-display font-bold text-primary text-sm uppercase tracking-wider pb-3 border-b border-border">
           Ürün Adı
@@ -171,7 +152,6 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
         </div>
       </section>
 
-      {/* Kategori */}
       <section className="bg-surface border border-border rounded-sm p-6 space-y-4">
         <h2 className="font-display font-bold text-primary text-sm uppercase tracking-wider pb-3 border-b border-border">
           Kategori
@@ -207,7 +187,6 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
         </div>
       </section>
 
-      {/* Fiyat & Stok */}
       <section className="bg-surface border border-border rounded-sm p-6 space-y-4">
         <h2 className="font-display font-bold text-primary text-sm uppercase tracking-wider pb-3 border-b border-border">
           Fiyat & Stok
@@ -233,7 +212,6 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
         </label>
       </section>
 
-      {/* Açıklamalar */}
       <section className="bg-surface border border-border rounded-sm p-6 space-y-4">
         <h2 className="font-display font-bold text-primary text-sm uppercase tracking-wider pb-3 border-b border-border">
           Açıklama
@@ -252,7 +230,6 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
         </div>
       </section>
 
-      {/* Görsel */}
       <section className="bg-surface border border-border rounded-sm p-6 space-y-4">
         <h2 className="font-display font-bold text-primary text-sm uppercase tracking-wider pb-3 border-b border-border">
           Ürün Görseli
@@ -286,7 +263,6 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
         )}
       </section>
 
-      {/* Kaydet */}
       <div className="flex items-center gap-3">
         <button
           type="submit"

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Plus, Pencil, Trash2, Package, AlertCircle } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { adminFetchProducts, adminDeleteProduct } from '@/lib/admin-api';
 import type { Product } from '@/types/product';
 
 export default function AdminPage() {
@@ -15,13 +15,14 @@ export default function AdminPage() {
 
   const fetchProducts = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (error) setError(error.message);
-    else setProducts(data ?? []);
-    setLoading(false);
+    try {
+      const data = await adminFetchProducts();
+      setProducts(data);
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => { fetchProducts(); }, []);
@@ -29,10 +30,14 @@ export default function AdminPage() {
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`"${name}" silinsin mi?`)) return;
     setDeletingId(id);
-    const { error } = await supabase.from('products').delete().eq('id', id);
-    if (error) alert('Silinemedi: ' + error.message);
-    else setProducts((p) => p.filter((x) => x.id !== id));
-    setDeletingId(null);
+    try {
+      await adminDeleteProduct(id);
+      setProducts((p) => p.filter((x) => x.id !== id));
+    } catch (e) {
+      alert('Silinemedi: ' + (e as Error).message);
+    } finally {
+      setDeletingId(null);
+    }
   };
 
   return (

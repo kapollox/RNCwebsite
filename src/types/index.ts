@@ -1,16 +1,20 @@
 export interface SubCategory {
   id: string;
   name: string;
+  name_en: string;
   slug: string;
   description?: string;
+  description_en?: string;
   image?: string;
 }
 
 export interface Category {
   id: string;
   name: string;
+  name_en: string;
   slug: string;
   description: string;
+  description_en: string;
   partCount: number;
   iconName: string;
   image?: string;

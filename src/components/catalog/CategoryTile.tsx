@@ -11,7 +11,8 @@ import {
   Wrench, Link as LinkIcon, Star,
 } from 'lucide-react';
 
-const ICON_MAP: Record<string, React.ElementType> = {
+type LucideIcon = React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
+const ICON_MAP: Record<string, LucideIcon> = {
   Lightbulb, MoveVertical, Shield, Settings2,
   Zap, Wind, CircleDot, SlidersHorizontal, Gauge, Lock,
   ShieldCheck, Cog, Package, Cable, Circle, MoveDown,

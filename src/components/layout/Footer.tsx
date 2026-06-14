@@ -4,18 +4,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Phone, MapPin, Clock, MessageCircle } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import type { TranslationKey } from '@/lib/i18n';
 
-const partLinks = [
-  { href: '/parca-listesi/elektrik-grubu', label: 'Elektrik Grubu' },
-  { href: '/parca-listesi/fren-balata-grubu', label: 'Fren & Balata' },
-  { href: '/parca-listesi/motor-aksami', label: 'Motor Aksamı' },
-  { href: '/parca-listesi/egzoz-grubu', label: 'Egzoz Grubu' },
-  { href: '/parca-listesi/zincirler-ve-zincir-disli-setleri', label: 'Zincir & Dişli' },
-  { href: '/parca-listesi/on-arka-teker-grubu', label: 'Teker Grubu' },
+const partLinkDefs: { href: string; key: TranslationKey }[] = [
+  { href: '/parca-listesi/elektrik-grubu', key: 'footer_part_electrical' },
+  { href: '/parca-listesi/fren-balata-grubu', key: 'footer_part_brake' },
+  { href: '/parca-listesi/motor-aksami', key: 'footer_part_engine' },
+  { href: '/parca-listesi/egzoz-grubu', key: 'footer_part_exhaust' },
+  { href: '/parca-listesi/zincirler-ve-zincir-disli-setleri', key: 'footer_part_chain' },
+  { href: '/parca-listesi/on-arka-teker-grubu', key: 'footer_part_wheel' },
 ];
 
 export function Footer() {
   const { t } = useLanguage();
+
+  const partLinks = partLinkDefs.map((d) => ({ href: d.href, label: t(d.key) }));
 
   const companyLinks = [
     { href: '/hakkimizda', label: t('footer_link_about') },

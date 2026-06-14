@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { MessageCircle, ArrowLeft, Package } from 'lucide-react';
+import { ArrowLeft, Package, MessageCircle } from 'lucide-react';
 import { Breadcrumb } from '@/components/catalog/Breadcrumb';
-import { ProductCard } from '@/components/catalog/ProductCard';
+import { ProductListWithFilters } from '@/components/catalog/ProductListWithFilters';
 import { getCategoryBySlug, getSubCategoryBySlug } from '@/data/categories';
 import { supabase } from '@/lib/supabase';
 import type { Product } from '@/types/product';
@@ -47,9 +47,9 @@ export default async function SubCategoryPage({ params }: PageProps) {
     <>
       <Breadcrumb
         items={[
-          { label: 'Parça Listesi', href: '/parca-listesi' },
-          { label: category.name, href: `/parca-listesi/${category.slug}` },
-          { label: subcategory.name },
+          { label: 'Parça Listesi', labelKey: 'breadcrumb_parts', href: '/parca-listesi' },
+          { label: category.name, labelEn: category.name_en, href: `/parca-listesi/${category.slug}` },
+          { label: subcategory.name, labelEn: subcategory.name_en },
         ]}
       />
 
@@ -63,31 +63,12 @@ export default async function SubCategoryPage({ params }: PageProps) {
       </div>
 
       {items.length > 0 ? (
-        <>
-          <div className="text-xs text-text-subtle mb-4">
-            {items.length} ürün
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {items.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-          {/* WhatsApp CTA altına */}
-          <div className="mt-10 bg-surface border border-border rounded-sm p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-text-muted">
-              Aradığınız parçayı bulamadınız mı? WhatsApp'tan sorun.
-            </p>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-whatsapp text-white text-sm font-semibold rounded-sm hover:bg-whatsapp-dark transition-colors shrink-0"
-            >
-              <MessageCircle size={15} />
-              WhatsApp ile Sor
-            </a>
-          </div>
-        </>
+        <ProductListWithFilters
+          products={items}
+          subcategoryName={subcategory.name}
+          subcategoryNameEn={subcategory.name_en}
+          whatsappUrl={whatsappUrl}
+        />
       ) : (
         /* Ürün yoksa — WhatsApp yönlendirmeli "yakında" ekranı */
         <div className="bg-surface border border-border rounded-sm overflow-hidden">

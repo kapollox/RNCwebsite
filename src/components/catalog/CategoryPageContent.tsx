@@ -2,6 +2,7 @@
 
 import { SubcategoryTile } from '@/components/catalog/SubcategoryTile';
 import { useLanguage } from '@/context/LanguageContext';
+import { getCatName, getCatDescription, getSubCatName, getSubCatDescription } from '@/lib/category-utils';
 import type { Category } from '@/types';
 
 interface Props {
@@ -9,7 +10,7 @@ interface Props {
 }
 
 export function CategoryPageContent({ category }: Props) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
 
   return (
     <>
@@ -19,13 +20,13 @@ export function CategoryPageContent({ category }: Props) {
         <div className="px-5 py-4">
           <div className="flex flex-wrap items-center gap-2.5 mb-1.5">
             <h1 className="font-display text-2xl md:text-3xl font-black text-primary tracking-tight">
-              {category.name}
+              {getCatName(category, locale)}
             </h1>
             <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase text-accent border border-accent/30 bg-rose-50 rounded-sm">
               {category.subcategories.length} {t('cat_page_badge')}
             </span>
           </div>
-          <p className="text-text-muted text-sm leading-relaxed">{category.description}</p>
+          <p className="text-text-muted text-sm leading-relaxed">{getCatDescription(category, locale)}</p>
         </div>
       </div>
 
@@ -34,11 +35,11 @@ export function CategoryPageContent({ category }: Props) {
           {category.subcategories.map((sub) => (
             <SubcategoryTile
               key={sub.id}
-              name={sub.name}
+              name={getSubCatName(sub, locale)}
               href={`/parca-listesi/${category.slug}/${sub.slug}`}
               iconName={category.iconName}
               image={sub.image}
-              description={sub.description}
+              description={getSubCatDescription(sub, locale)}
             />
           ))}
         </div>

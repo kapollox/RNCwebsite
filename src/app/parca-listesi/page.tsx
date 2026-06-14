@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ParcaListesiPage() {
   return (
     <>
-      <Breadcrumb items={[{ label: 'Parça Listesi' }]} />
+      <Breadcrumb items={[{ label: 'Parça Listesi', labelKey: 'breadcrumb_parts' }]} />
       <CatalogPageContent categories={categories} />
     </>
   );

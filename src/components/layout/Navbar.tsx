@@ -17,6 +17,7 @@ export function Navbar() {
 
   const navLinks = [
     { href: '/parca-listesi', label: t('nav_parts') },
+    { href: '/markalar', label: t('nav_brands') },
     { href: '/hakkimizda', label: t('nav_about') },
     { href: '/iletisim', label: t('nav_contact') },
   ];
@@ -153,7 +154,7 @@ export function Navbar() {
               >
                 <span className="flex items-center gap-2">
                   <ShoppingCart size={16} />
-                  Sepetim
+                  {t('nav_cart')}
                 </span>
                 {totalCount > 0 && (
                   <span className="px-2 py-0.5 bg-accent text-white text-xs font-bold rounded-full">

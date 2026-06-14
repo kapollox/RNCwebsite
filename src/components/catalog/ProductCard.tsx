@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { ShoppingCart, Package } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useLanguage } from '@/context/LanguageContext';
@@ -13,11 +14,12 @@ export function ProductCard({ product }: { product: Product }) {
   const name = locale === 'tr' ? product.name_tr : product.name_en;
   const description = locale === 'tr' ? product.description_tr : product.description_en;
   const inCart = items.some((i) => i.product.id === product.id);
+  const detailHref = `/parca-listesi/${product.category_id}/${product.subcategory_id}/${product.slug}`;
 
   return (
-    <div className="bg-surface border border-border rounded-sm overflow-hidden flex flex-col group hover:border-primary transition-colors duration-150">
-      {/* Görsel */}
-      <div className="relative aspect-square bg-surface-muted border-b border-border overflow-hidden">
+    <div className="bg-surface border border-border rounded-sm overflow-hidden flex flex-col group hover:border-primary hover:shadow-sm transition-all duration-150">
+      {/* Görsel — tıklanabilir */}
+      <Link href={detailHref} className="relative aspect-square bg-surface-muted border-b border-border overflow-hidden block">
         {product.image_url ? (
           <Image
             src={product.image_url}
@@ -36,7 +38,6 @@ export function ProductCard({ product }: { product: Product }) {
             <Package size={32} className="text-text-subtle" />
           </div>
         )}
-        {/* Stok durumu */}
         {product.stock === 0 && (
           <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
             <span className="text-[10px] font-black tracking-[0.14em] uppercase text-text-muted border border-border bg-surface px-2 py-1 rounded-sm">
@@ -44,13 +45,16 @@ export function ProductCard({ product }: { product: Product }) {
             </span>
           </div>
         )}
-      </div>
+      </Link>
 
       {/* Bilgi */}
       <div className="p-4 flex flex-col flex-1">
-        <h3 className="font-display font-bold text-primary text-sm leading-snug mb-1 line-clamp-2">
-          {name}
-        </h3>
+        {/* Başlık — tıklanabilir */}
+        <Link href={detailHref} className="block mb-1 hover:text-accent transition-colors">
+          <h3 className="font-display font-bold text-primary text-sm leading-snug line-clamp-2">
+            {name}
+          </h3>
+        </Link>
         {description && (
           <p className="text-text-muted text-xs leading-relaxed mb-3 line-clamp-2 flex-1">
             {description}

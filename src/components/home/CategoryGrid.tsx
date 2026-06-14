@@ -8,8 +8,10 @@ import {
 import { featuredCategories } from '@/data/categories';
 import { SectionHeader } from '@/components/ui/SectionHeader';
 import { useLanguage } from '@/context/LanguageContext';
+import { getCatName, getCatDescription } from '@/lib/category-utils';
 
-const iconMap: Record<string, React.ElementType> = {
+type LucideIcon = React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
+const iconMap: Record<string, LucideIcon> = {
   Cog,
   CircleDot,
   Zap,
@@ -19,7 +21,7 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 export function CategoryGrid() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
 
   return (
     <section className="bg-surface-muted border-b border-border">
@@ -58,14 +60,14 @@ export function CategoryGrid() {
                 <div className="min-w-0">
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <h3 className="font-display font-bold text-primary text-sm group-hover:text-accent transition-colors duration-150">
-                      {category.name}
+                      {getCatName(category, locale)}
                     </h3>
                     <span className="part-number text-text-subtle shrink-0">
                       {category.partCount}+
                     </span>
                   </div>
                   <p className="text-text-muted text-xs leading-relaxed line-clamp-2">
-                    {category.description}
+                    {getCatDescription(category, locale)}
                   </p>
                 </div>
               </Link>

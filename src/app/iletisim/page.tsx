@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ContactPageHeader } from '@/components/contact/ContactPageHeader';
 import { ContactInfo } from '@/components/contact/ContactInfo';
 import { ContactForm } from '@/components/contact/ContactForm';
 
@@ -11,20 +12,7 @@ export const metadata: Metadata = {
 export default function IletisimPage() {
   return (
     <>
-      {/* Page header */}
-      <section className="bg-surface-muted border-b border-border">
-        <div className="container-main py-12 md:py-16">
-          <span className="text-[10px] font-black tracking-[0.18em] uppercase text-accent mb-4 block">
-            İLETİŞİM
-          </span>
-          <h1 className="font-display text-3xl md:text-4xl font-black text-primary tracking-tight mb-3">
-            Bizimle İletişime Geçin
-          </h1>
-          <p className="text-text-muted max-w-lg leading-relaxed">
-            Honda yedek parça sorularınız için WhatsApp üzerinden bize ulaşabilir, telefon veya ziyaret yoluyla destek alabilirsiniz.
-          </p>
-        </div>
-      </section>
+      <ContactPageHeader />
 
       {/* Main contact section */}
       <section className="bg-surface">

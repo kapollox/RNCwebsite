@@ -28,8 +28,8 @@ export default async function CategoryPage({ params }: PageProps) {
     <>
       <Breadcrumb
         items={[
-          { label: 'Parça Listesi', href: '/parca-listesi' },
-          { label: category.name },
+          { label: 'Parça Listesi', labelKey: 'breadcrumb_parts', href: '/parca-listesi' },
+          { label: category.name, labelEn: category.name_en },
         ]}
       />
       <CategoryPageContent category={category} />

@@ -6,10 +6,11 @@ import { ChevronRight } from 'lucide-react';
 import { categories } from '@/data/categories';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
+import { getCatName } from '@/lib/category-utils';
 
 export function CategorySidebar() {
   const pathname = usePathname();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   // Extract active category slug from path: /parca-listesi/[category]/...
   const segments = pathname.split('/').filter(Boolean);
   const activeCategorySlug = segments[1]; // index 0 = 'parca-listesi'
@@ -44,7 +45,7 @@ export function CategorySidebar() {
                       : 'text-primary hover:bg-surface-muted hover:text-primary border-transparent hover:border-border'
                   )}
                 >
-                  <span className="leading-snug">{cat.name}</span>
+                  <span className="leading-snug">{getCatName(cat, locale)}</span>
                   {isActive && (
                     <ChevronRight size={12} className="shrink-0 text-accent" />
                   )}
@@ -86,7 +87,7 @@ export function CategorySidebar() {
                       : 'border-border text-primary hover:border-primary bg-surface'
                   )}
                 >
-                  {cat.name}
+                  {getCatName(cat, locale)}
                 </Link>
               );
             })}

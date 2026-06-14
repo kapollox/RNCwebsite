@@ -90,6 +90,25 @@ h6 {
   background-size: 56px 56px;
 }
 
+/* 3D Hero section animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.4s ease-out both;
+}
+
+.animate-fadeUp {
+  animation: fadeUp 0.45s ease-out both;
+}
+
 /* Catalog/spec number style */
 .part-number {
   font-family: ui-monospace, "JetBrains Mono", "Fira Code", monospace;

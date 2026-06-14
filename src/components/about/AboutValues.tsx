@@ -1,6 +1,6 @@
 'use client';
 
-import { Shield, Settings2, Users } from 'lucide-react';
+import { Shield, Settings2, Users, Eye } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export function AboutValues() {
@@ -22,6 +22,11 @@ export function AboutValues() {
       label: t('values3_label'),
       description: t('values3_desc'),
     },
+    {
+      icon: Eye,
+      label: t('values4_label'),
+      description: t('values4_desc'),
+    },
   ];
 
   return (
@@ -33,7 +38,7 @@ export function AboutValues() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {values.map((val) => {
             const Icon = val.icon;
             return (
