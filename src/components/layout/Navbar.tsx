@@ -4,14 +4,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { Menu, X, Phone } from 'lucide-react';
+import { Menu, X, Phone, ShoppingCart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
+import { useCart } from '@/context/CartContext';
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const { locale, setLocale, t } = useLanguage();
+  const { totalCount } = useCart();
 
   const navLinks = [
     { href: '/parca-listesi', label: t('nav_parts') },
@@ -62,6 +64,15 @@ export function Navbar() {
 
           {/* Desktop Right */}
           <div className="hidden md:flex items-center gap-3">
+            {/* Sepet ikonu */}
+            <Link href="/sepet" className="relative p-2 text-text-muted hover:text-primary transition-colors duration-150">
+              <ShoppingCart size={20} />
+              {totalCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center bg-accent text-white text-[10px] font-bold rounded-full leading-none">
+                  {totalCount > 99 ? '99+' : totalCount}
+                </span>
+              )}
+            </Link>
             <a
               href="tel:+905462096969"
               className="flex items-center gap-2 text-sm text-text-muted hover:text-primary transition-colors duration-150"
@@ -135,6 +146,21 @@ export function Navbar() {
               );
             })}
             <div className="pt-3 mt-2 border-t border-border flex flex-col gap-2">
+              <Link
+                href="/sepet"
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-between px-3 py-3 rounded-sm text-sm font-semibold text-primary hover:bg-surface-muted transition-colors"
+              >
+                <span className="flex items-center gap-2">
+                  <ShoppingCart size={16} />
+                  Sepetim
+                </span>
+                {totalCount > 0 && (
+                  <span className="px-2 py-0.5 bg-accent text-white text-xs font-bold rounded-full">
+                    {totalCount}
+                  </span>
+                )}
+              </Link>
               <a
                 href="tel:+905462096969"
                 className="flex items-center gap-2 px-3 py-2 text-sm text-text-muted"
