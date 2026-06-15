@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { supabase as supabaseAdmin } from '@/lib/supabase';
 import type { Category, SubCategory } from '@/types';
 
 type DbCategory = {

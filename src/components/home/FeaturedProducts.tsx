@@ -1,4 +1,4 @@
-import { supabaseAdmin } from '@/lib/supabase-admin';
+import { supabase as supabaseAdmin } from '@/lib/supabase';
 import { FeaturedProductsClient } from './FeaturedProductsClient';
 import type { Product } from '@/types/product';
 
