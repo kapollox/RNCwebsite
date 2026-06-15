@@ -1,0 +1,26 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
+import { supabaseAdmin } from '@/lib/supabase-admin';
+import { requireAdmin } from '@/lib/admin-auth';
+
+export async function POST(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: 401 });
+
+  const body = await req.json();
+  const slug = body.name_tr
+    .toLowerCase()
+    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+    .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
+
+  const { data, error } = await supabaseAdmin
+    .from('subcategories')
+    .insert({ category_id: body.category_id, name_tr: body.name_tr, name_en: body.name_en ?? body.name_tr, slug })
+    .select()
+    .single();
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  revalidatePath('/parca-listesi', 'layout');
+  return NextResponse.json(data, { status: 201 });
+}

@@ -1,21 +1,23 @@
-const token = () =>
-  typeof window !== 'undefined'
-    ? (sessionStorage.getItem('rnc-admin-token') ?? '')
-    : '';
+import { createSupabaseBrowser } from '@/lib/supabase-browser';
 
-const headers = () => ({
-  'Content-Type': 'application/json',
-  'x-admin-token': token(),
-});
+async function getAuthHeaders(): Promise<Record<string, string>> {
+  const supabase = createSupabaseBrowser();
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token ?? '';
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+  };
+}
 
 export async function adminFetchProducts() {
-  const res = await fetch('/api/admin/products', { headers: headers() });
+  const res = await fetch('/api/admin/products', { headers: await getAuthHeaders() });
   if (!res.ok) throw new Error('Ürünler yüklenemedi');
   return res.json();
 }
 
 export async function adminFetchProduct(id: string) {
-  const res = await fetch(`/api/admin/products/${id}`, { headers: headers() });
+  const res = await fetch(`/api/admin/products/${id}`, { headers: await getAuthHeaders() });
   if (!res.ok) throw new Error('Ürün bulunamadı');
   return res.json();
 }
@@ -23,7 +25,7 @@ export async function adminFetchProduct(id: string) {
 export async function adminCreateProduct(payload: object) {
   const res = await fetch('/api/admin/products', {
     method: 'POST',
-    headers: headers(),
+    headers: await getAuthHeaders(),
     body: JSON.stringify(payload),
   });
   const data = await res.json();
@@ -34,7 +36,7 @@ export async function adminCreateProduct(payload: object) {
 export async function adminUpdateProduct(id: string, payload: object) {
   const res = await fetch(`/api/admin/products/${id}`, {
     method: 'PUT',
-    headers: headers(),
+    headers: await getAuthHeaders(),
     body: JSON.stringify(payload),
   });
   const data = await res.json();
@@ -45,7 +47,7 @@ export async function adminUpdateProduct(id: string, payload: object) {
 export async function adminDeleteProduct(id: string) {
   const res = await fetch(`/api/admin/products/${id}`, {
     method: 'DELETE',
-    headers: headers(),
+    headers: await getAuthHeaders(),
   });
   if (!res.ok) throw new Error('Ürün silinemedi');
 }

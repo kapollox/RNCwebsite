@@ -18,6 +18,20 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const KNOWN_BRANDS = ['RKS Motor', 'Kuba Motor', 'Mondial', 'Arora', 'Yuki'];
+
+  const initialBrandSelect =
+    initial?.brand == null
+      ? ''
+      : KNOWN_BRANDS.includes(initial.brand)
+      ? initial.brand
+      : 'Diğer';
+
+  const [brandSelect, setBrandSelect] = useState(initialBrandSelect);
+  const [brandCustom, setBrandCustom] = useState(
+    initialBrandSelect === 'Diğer' ? (initial?.brand ?? '') : ''
+  );
+
   const [form, setForm] = useState({
     name_tr: initial?.name_tr ?? '',
     name_en: initial?.name_en ?? '',
@@ -90,10 +104,14 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
     setSaving(true);
     setError('');
 
+    const resolvedBrand =
+      brandSelect === 'Diğer' ? (brandCustom.trim() || null) : (brandSelect || null);
+
     const payload = {
       name_tr: form.name_tr,
       name_en: form.name_en,
       slug: form.slug,
+      brand: resolvedBrand,
       category_id: form.category_id,
       subcategory_id: form.subcategory_id || null,
       price: form.price ? parseFloat(form.price) : null,
@@ -149,6 +167,39 @@ export function ProductForm({ initial, mode }: ProductFormProps) {
         <div>
           <label className={labelCls}>Slug *</label>
           <input className={inputCls} value={form.slug} onChange={(e) => set('slug', e.target.value)} placeholder="honda-cb500f-on-fren-balatasi" />
+        </div>
+      </section>
+
+      <section className="bg-surface border border-border rounded-sm p-6 space-y-4">
+        <h2 className="font-display font-bold text-primary text-sm uppercase tracking-wider pb-3 border-b border-border">
+          Marka
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className={labelCls}>Marka</label>
+            <select
+              className={inputCls}
+              value={brandSelect}
+              onChange={(e) => { setBrandSelect(e.target.value); setBrandCustom(''); }}
+            >
+              <option value="">Marka seç...</option>
+              {KNOWN_BRANDS.map((b) => (
+                <option key={b} value={b}>{b}</option>
+              ))}
+              <option value="Diğer">Diğer</option>
+            </select>
+          </div>
+          {brandSelect === 'Diğer' && (
+            <div>
+              <label className={labelCls}>Marka Adı (El ile gir)</label>
+              <input
+                className={inputCls}
+                value={brandCustom}
+                onChange={(e) => setBrandCustom(e.target.value)}
+                placeholder="Marka adını yazın..."
+              />
+            </div>
+          )}
         </div>
       </section>
 

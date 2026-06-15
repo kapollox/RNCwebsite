@@ -1,17 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Pencil, Trash2, Package, AlertCircle } from 'lucide-react';
+import { Plus, Pencil, Trash2, Package, AlertCircle, Filter } from 'lucide-react';
 import { adminFetchProducts, adminDeleteProduct } from '@/lib/admin-api';
 import type { Product } from '@/types/product';
+
+const BRAND_FILTERS = ['Tümü', 'RKS Motor', 'Kuba Motor', 'Mondial', 'Arora', 'Yuki', 'Diğer', 'Markasız'];
 
 export default function AdminPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [brandFilter, setBrandFilter] = useState('Tümü');
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -26,6 +29,17 @@ export default function AdminPage() {
   };
 
   useEffect(() => { fetchProducts(); }, []);
+
+  const KNOWN_BRANDS = ['RKS Motor', 'Kuba Motor', 'Mondial', 'Arora', 'Yuki'];
+
+  const filtered = useMemo(() => {
+    if (brandFilter === 'Tümü') return products;
+    if (brandFilter === 'Markasız') return products.filter((p) => !p.brand);
+    if (brandFilter === 'Diğer') return products.filter(
+      (p) => p.brand && !KNOWN_BRANDS.includes(p.brand)
+    );
+    return products.filter((p) => p.brand === brandFilter);
+  }, [products, brandFilter]);
 
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`"${name}" silinsin mi?`)) return;
@@ -63,6 +77,27 @@ export default function AdminPage() {
         </div>
       )}
 
+      {/* Marka filtresi */}
+      {!loading && products.length > 0 && (
+        <div className="flex items-center gap-2 mb-5 flex-wrap">
+          <Filter size={13} className="text-text-subtle shrink-0" />
+          {BRAND_FILTERS.map((b) => (
+            <button
+              key={b}
+              onClick={() => setBrandFilter(b)}
+              className={`px-3 py-1 text-xs font-semibold rounded-full border transition-colors ${
+                brandFilter === b
+                  ? 'bg-primary text-white border-primary'
+                  : 'bg-surface text-text-muted border-border hover:border-primary hover:text-primary'
+              }`}
+            >
+              {b}
+            </button>
+          ))}
+          <span className="text-text-subtle text-xs ml-1">{filtered.length} sonuç</span>
+        </div>
+      )}
+
       {loading ? (
         <div className="text-text-muted text-sm">Yükleniyor...</div>
       ) : products.length === 0 ? (
@@ -82,6 +117,7 @@ export default function AdminPage() {
             <thead className="bg-surface-muted border-b border-border">
               <tr>
                 <th className="text-left px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle">Ürün</th>
+                <th className="text-left px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle hidden lg:table-cell">Marka</th>
                 <th className="text-left px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle hidden md:table-cell">Kategori</th>
                 <th className="text-right px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle">Fiyat</th>
                 <th className="text-right px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle">Stok</th>
@@ -90,7 +126,7 @@ export default function AdminPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {products.map((product) => (
+              {filtered.map((product) => (
                 <tr key={product.id} className="hover:bg-surface-muted transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
@@ -108,6 +144,15 @@ export default function AdminPage() {
                         <p className="text-text-subtle text-xs line-clamp-1">{product.name_en}</p>
                       </div>
                     </div>
+                  </td>
+                  <td className="px-4 py-3 hidden lg:table-cell">
+                    {product.brand ? (
+                      <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded-full bg-surface-muted text-text-muted border border-border">
+                        {product.brand}
+                      </span>
+                    ) : (
+                      <span className="text-text-subtle text-xs">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-text-muted hidden md:table-cell">
                     <span className="text-xs">{product.category_id}</span>

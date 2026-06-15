@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Breadcrumb } from '@/components/catalog/Breadcrumb';
 import { CategoryPageContent } from '@/components/catalog/CategoryPageContent';
-import { getCategoryBySlug } from '@/data/categories';
+import { getCategoryBySlug } from '@/lib/categories-db';
 
 interface PageProps {
   params: Promise<{ category: string }>;
@@ -10,17 +10,17 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { category: slug } = await params;
-  const category = getCategoryBySlug(slug);
+  const category = await getCategoryBySlug(slug);
   if (!category) return { title: 'Kategori Bulunamadı' };
   return {
     title: category.name,
-    description: `Honda motosiklet ${category.name.toLowerCase()} parçaları. ${category.description}`,
+    description: `Motosiklet ${category.name.toLowerCase()} parçaları. ${category.description}`,
   };
 }
 
 export default async function CategoryPage({ params }: PageProps) {
   const { category: slug } = await params;
-  const category = getCategoryBySlug(slug);
+  const category = await getCategoryBySlug(slug);
 
   if (!category) notFound();
 

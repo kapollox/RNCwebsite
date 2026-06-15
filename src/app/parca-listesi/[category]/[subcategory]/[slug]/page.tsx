@@ -7,11 +7,18 @@ import Link from 'next/link';
 import { ShoppingCart, Package, ArrowLeft, CheckCircle2, XCircle, Plus, Minus } from 'lucide-react';
 import { Breadcrumb } from '@/components/catalog/Breadcrumb';
 import { Toast } from '@/components/ui/Toast';
-import { getCategoryBySlug, getSubCategoryBySlug } from '@/data/categories';
 import { useCart } from '@/context/CartContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { supabase } from '@/lib/supabase';
 import type { Product } from '@/types/product';
+
+type BreadcrumbMeta = { categoryName: string; categoryNameEn: string; subName: string; subNameEn: string } | null;
+
+function validImageUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  if (url.includes('picsum.photos')) return null;
+  return url;
+}
 
 export default function ProductDetailPage() {
   const { category: catSlug, subcategory: subSlug, slug } = useParams<{
@@ -29,14 +36,12 @@ export default function ProductDetailPage() {
   const [qty, setQty] = useState(1);
   const [toast, setToast] = useState<string | null>(null);
   const [confirmUpdate, setConfirmUpdate] = useState(false);
+  const [breadcrumbMeta, setBreadcrumbMeta] = useState<BreadcrumbMeta>(null);
 
   const showToast = useCallback((msg: string) => {
     setToast(null);
     setTimeout(() => setToast(msg), 10);
   }, []);
-
-  const category = getCategoryBySlug(catSlug);
-  const subcategory = getSubCategoryBySlug(catSlug, subSlug);
 
   useEffect(() => {
     if (!slug) return;
@@ -52,6 +57,23 @@ export default function ProductDetailPage() {
         setLoading(false);
       });
   }, [slug]);
+
+  useEffect(() => {
+    if (!catSlug || !subSlug) return;
+    Promise.all([
+      supabase.from('categories').select('name_tr,name_en').eq('id', catSlug).single(),
+      supabase.from('subcategories').select('name_tr,name_en').eq('id', subSlug).single(),
+    ]).then(([{ data: cat }, { data: sub }]) => {
+      if (cat && sub) {
+        setBreadcrumbMeta({
+          categoryName: cat.name_tr,
+          categoryNameEn: cat.name_en,
+          subName: sub.name_tr,
+          subNameEn: sub.name_en,
+        });
+      }
+    });
+  }, [catSlug, subSlug]);
 
   if (loading) {
     return (
@@ -111,13 +133,13 @@ export default function ProductDetailPage() {
         items={[
           { label: 'Parça Listesi', labelKey: 'breadcrumb_parts', href: '/parca-listesi' },
           {
-            label: category?.name ?? catSlug,
-            labelEn: category?.name_en,
+            label: breadcrumbMeta?.categoryName ?? catSlug,
+            labelEn: breadcrumbMeta?.categoryNameEn,
             href: `/parca-listesi/${catSlug}`,
           },
           {
-            label: subcategory?.name ?? subSlug,
-            labelEn: subcategory?.name_en,
+            label: breadcrumbMeta?.subName ?? subSlug,
+            labelEn: breadcrumbMeta?.subNameEn,
             href: `/parca-listesi/${catSlug}/${subSlug}`,
           },
           { label: name },
@@ -127,9 +149,9 @@ export default function ProductDetailPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         {/* Görsel */}
         <div className="relative aspect-square bg-surface border border-border rounded-sm overflow-hidden">
-          {product.image_url ? (
+          {validImageUrl(product.image_url) ? (
             <Image
-              src={product.image_url}
+              src={validImageUrl(product.image_url)!}
               alt={name}
               fill
               className="object-contain p-8"

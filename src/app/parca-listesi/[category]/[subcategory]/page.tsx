@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ArrowLeft, Package, MessageCircle } from 'lucide-react';
 import { Breadcrumb } from '@/components/catalog/Breadcrumb';
 import { ProductListWithFilters } from '@/components/catalog/ProductListWithFilters';
-import { getCategoryBySlug, getSubCategoryBySlug } from '@/data/categories';
+import { getCategoryBySlug, getSubcategoryBySlug } from '@/lib/categories-db';
 import { supabase } from '@/lib/supabase';
 import type { Product } from '@/types/product';
 
@@ -14,22 +14,24 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { category: catSlug, subcategory: subSlug } = await params;
-  const sub = getSubCategoryBySlug(catSlug, subSlug);
+  const sub = await getSubcategoryBySlug(catSlug, subSlug);
   if (!sub) return { title: 'Alt Kategori Bulunamadı' };
   return {
     title: sub.name,
-    description: sub.description ?? `Honda motosiklet ${sub.name.toLowerCase()} parçaları.`,
+    description: sub.description ?? `Motosiklet ${sub.name.toLowerCase()} parçaları.`,
   };
 }
 
 export default async function SubCategoryPage({ params }: PageProps) {
   const { category: catSlug, subcategory: subSlug } = await params;
-  const category = getCategoryBySlug(catSlug);
-  const subcategory = getSubCategoryBySlug(catSlug, subSlug);
+
+  const [category, subcategory] = await Promise.all([
+    getCategoryBySlug(catSlug),
+    getSubcategoryBySlug(catSlug, subSlug),
+  ]);
 
   if (!category || !subcategory) notFound();
 
-  // Supabase'den ürünleri çek
   const { data: products } = await supabase
     .from('products')
     .select('*')
@@ -40,7 +42,7 @@ export default async function SubCategoryPage({ params }: PageProps) {
 
   const items: Product[] = products ?? [];
 
-  const whatsappMessage = `Merhaba, Honda motosikletim için ${subcategory.name} parçası sorgulamak istiyorum. Model ve yıl bilgilerimi paylaşacağım.`;
+  const whatsappMessage = `Merhaba, motosikletim için ${subcategory.name} parçası sorgulamak istiyorum. Model ve yıl bilgilerimi paylaşacağım.`;
   const whatsappUrl = `https://wa.me/905462096969?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
@@ -70,7 +72,6 @@ export default async function SubCategoryPage({ params }: PageProps) {
           whatsappUrl={whatsappUrl}
         />
       ) : (
-        /* Ürün yoksa — WhatsApp yönlendirmeli "yakında" ekranı */
         <div className="bg-surface border border-border rounded-sm overflow-hidden">
           <div className="h-1 bg-accent" />
           <div className="px-8 py-14 flex flex-col items-center text-center max-w-md mx-auto">
@@ -90,7 +91,7 @@ export default async function SubCategoryPage({ params }: PageProps) {
             </h2>
             <p className="text-text-muted text-sm leading-relaxed mb-8">
               <strong className="text-primary">{subcategory.name}</strong> kategorisindeki
-              Honda motosiklet parçaları kataloğa ekleniyor.
+              motosiklet parçaları kataloğa ekleniyor.
               <br />
               Şimdi WhatsApp üzerinden parça sorgulayabilirsiniz.
             </p>

@@ -3,6 +3,7 @@ export interface Product {
   name_tr: string;
   name_en: string;
   slug: string;
+  brand: string | null;
   category_id: string;
   subcategory_id: string | null;
   price: number | null;

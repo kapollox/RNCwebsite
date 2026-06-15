@@ -1,15 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
-
-function isAuthorized(req: NextRequest) {
-  const token = req.headers.get('x-admin-token');
-  return token === process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
-}
+import { requireAdmin } from '@/lib/admin-auth';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  if (!isAuthorized(req)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: 401 });
 
   const { id } = await params;
   const { data, error } = await supabaseAdmin
@@ -23,9 +18,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  if (!isAuthorized(req)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: 401 });
 
   const { id } = await params;
   const body = await req.json();
@@ -41,9 +35,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  if (!isAuthorized(req)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: 401 });
 
   const { id } = await params;
   const { error } = await supabaseAdmin

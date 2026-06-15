@@ -7,6 +7,12 @@ import { useCart } from '@/context/CartContext';
 import { useLanguage } from '@/context/LanguageContext';
 import type { Product } from '@/types/product';
 
+function validImageUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  if (url.includes('picsum.photos')) return null;
+  return url;
+}
+
 export function ProductCard({ product }: { product: Product }) {
   const { addItem, items } = useCart();
   const { locale } = useLanguage();
@@ -20,9 +26,9 @@ export function ProductCard({ product }: { product: Product }) {
     <div className="bg-surface border border-border rounded-sm overflow-hidden flex flex-col group hover:border-primary hover:shadow-sm transition-all duration-150">
       {/* Görsel — tıklanabilir */}
       <Link href={detailHref} className="relative aspect-square bg-surface-muted border-b border-border overflow-hidden block">
-        {product.image_url ? (
+        {validImageUrl(product.image_url) ? (
           <Image
-            src={product.image_url}
+            src={validImageUrl(product.image_url)!}
             alt={name}
             fill
             className="object-contain p-4 group-hover:scale-[1.04] transition-transform duration-200"

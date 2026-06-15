@@ -3,17 +3,20 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
-import { categories } from '@/data/categories';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/LanguageContext';
 import { getCatName } from '@/lib/category-utils';
+import type { Category } from '@/types';
 
-export function CategorySidebar() {
+interface Props {
+  categories: Category[];
+}
+
+export function CategorySidebar({ categories }: Props) {
   const pathname = usePathname();
   const { t, locale } = useLanguage();
-  // Extract active category slug from path: /parca-listesi/[category]/...
   const segments = pathname.split('/').filter(Boolean);
-  const activeCategorySlug = segments[1]; // index 0 = 'parca-listesi'
+  const activeCategorySlug = segments[1];
 
   return (
     <>
