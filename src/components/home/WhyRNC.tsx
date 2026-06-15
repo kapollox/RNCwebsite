@@ -1,31 +1,18 @@
 'use client';
 
 import { CheckCircle2 } from 'lucide-react';
-
-const reasons = [
-  {
-    number: '01',
-    title: 'Model Bazlı Doğru Parça Seçimi',
-    description: 'Her motosiklet modelinin farklı parça ihtiyacı vardır. Yıl, seri ve varyant bilgisine göre doğru parçayı belirleyerek yanlış alım riskini ortadan kaldırıyoruz.',
-  },
-  {
-    number: '02',
-    title: 'Hızlı ve Doğru İletişim Desteği',
-    description: 'Çalışma saatleri içinde parça sorularınıza hızlı dönüş sağlıyoruz. Stok durumu, uyumluluk ve teknik bilgi desteği tek mesajla.',
-  },
-  {
-    number: '03',
-    title: 'Güvenilir Tedarik ve Teslimat',
-    description: 'Desteklediğimiz markalar için düzenli stok ve hızlı kargo imkanı sunuyoruz. Zamanında teslimat önceliğimizdir.',
-  },
-  {
-    number: '04',
-    title: 'Kurumsal ve Şeffaf Hizmet Anlayışı',
-    description: 'Yıllardır sektörde faaliyet gösteren, referansları olan bir işletmeyiz. Müşterilerimize karşı şeffaf, çözüm odaklı ve güvenilir bir hizmet sunuyoruz.',
-  },
-];
+import { useLanguage } from '@/context/LanguageContext';
 
 export function WhyRNC() {
+  const { t } = useLanguage();
+
+  const reasons = [
+    { number: '01', title: t('why_reason1_title'), description: t('why_reason1_desc') },
+    { number: '02', title: t('why_reason2_title'), description: t('why_reason2_desc') },
+    { number: '03', title: t('why_reason3_title'), description: t('why_reason3_desc') },
+    { number: '04', title: t('why_reason4_title'), description: t('why_reason4_desc') },
+  ];
+
   return (
     <section className="relative overflow-hidden border-b border-white/5 bg-[#111418]">
       {/* Kırmızı ışık sağ üst */}
@@ -40,20 +27,20 @@ export function WhyRNC() {
           <div className="lg:sticky lg:top-28">
             <div className="flex items-center gap-3 mb-5">
               <span className="w-8 h-px bg-accent shrink-0" />
-              <span className="text-accent text-[10px] font-bold tracking-[0.22em] uppercase">Neden Biz?</span>
+              <span className="text-accent text-[10px] font-bold tracking-[0.22em] uppercase">{t('why_eyebrow')}</span>
             </div>
             <h2 className="font-display font-black text-white text-3xl md:text-4xl leading-[1.05] tracking-tight mb-6">
-              Neden RNC Motor?
+              {t('why_title')}
             </h2>
             <div className="w-12 h-[2px] bg-accent mb-6" />
             <p className="text-slate-400 text-[0.95rem] leading-relaxed max-w-sm">
-              Yılların tecrübesi ve güvenilir tedarik zinciriyle desteklediğimiz markalar için kaliteli yedek parça sunuyoruz. Model bazlı doğru parça seçimi, hızlı teslimat ve uzman teknik destekle müşterilerimizin zaman ve maliyet kaybını önlüyoruz.
+              {t('why_desc')}
             </p>
           </div>
 
           {/* Sağ — maddeler */}
           <div className="border-t border-white/10">
-            {reasons.map((reason, i) => (
+            {reasons.map((reason) => (
               <div
                 key={reason.number}
                 className="group flex gap-5 py-7 border-b border-white/10 last:border-b-0 hover:bg-white/[0.02] transition-colors duration-150 -mx-4 px-4 rounded-sm"
