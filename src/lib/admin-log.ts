@@ -6,17 +6,25 @@ export type LogAction =
   | 'product_delete'
   | 'bulk_upload';
 
+export interface FieldChange {
+  field: string;
+  old: unknown;
+  new: unknown;
+}
+
 export interface LogMeta {
   product_name?: string;
   brand?: string;
   category_id?: string;
   price?: number | null;
   stock?: number;
+  changes?: FieldChange[];
   inserted?: number;
   updated?: number;
   skipped?: number;
   failed?: number;
   file_name?: string;
+  total_rows?: number;
 }
 
 export async function writeLog(

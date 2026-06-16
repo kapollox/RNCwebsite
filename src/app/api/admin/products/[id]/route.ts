@@ -18,12 +18,25 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   return NextResponse.json(data);
 }
 
+const TRACKED_FIELDS: Array<keyof import('@/types/product').Product> = [
+  'name_tr', 'name_en', 'brand', 'price', 'stock',
+  'category_id', 'subcategory_id', 'is_active', 'image_url',
+];
+
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const auth = await requireAdmin(req);
   if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: 401 });
 
   const { id } = await params;
   const body = await req.json();
+
+  // Güncellemeden önce eski değerleri al
+  const { data: before } = await supabaseAdmin
+    .from('products')
+    .select('*')
+    .eq('id', id)
+    .single();
+
   const { data, error } = await supabaseAdmin
     .from('products')
     .update(body)
@@ -33,12 +46,20 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
+  // Hangi alanlar değişti?
+  const changes = before
+    ? TRACKED_FIELDS
+        .filter((f) => String(before[f]) !== String(data[f]))
+        .map((f) => ({ field: f, old: before[f] ?? null, new: data[f] ?? null }))
+    : [];
+
   await writeLog(auth.userId!, 'product_update', {
     product_name: data.name_tr,
     brand: data.brand,
     category_id: data.category_id,
     price: data.price,
     stock: data.stock,
+    changes,
   });
 
   return NextResponse.json(data);

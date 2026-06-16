@@ -87,8 +87,8 @@ export async function POST(req: NextRequest) {
   const auth = await requireAdmin(req);
   if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: 401 });
 
-  const body = await req.json() as { rows: BulkRow[]; duplicateMode: DuplicateMode };
-  const { rows, duplicateMode } = body;
+  const body = await req.json() as { rows: BulkRow[]; duplicateMode: DuplicateMode; fileName?: string };
+  const { rows, duplicateMode, fileName } = body;
 
   const [{ data: cats }, { data: subs }] = await Promise.all([
     supabaseAdmin.from('categories').select('id, name_tr, slug'),
@@ -187,6 +187,8 @@ export async function POST(req: NextRequest) {
     updated,
     skipped,
     failed,
+    total_rows: rows.length,
+    file_name: fileName,
   });
 
   return NextResponse.json(results);

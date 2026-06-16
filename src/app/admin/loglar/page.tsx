@@ -1,10 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AlertCircle, PackagePlus, PackageCheck, Trash2, Upload, Clock } from 'lucide-react';
+import { AlertCircle, PackagePlus, PackageCheck, Trash2, Upload, Clock, FileSpreadsheet, ArrowRight } from 'lucide-react';
 import { createSupabaseBrowser } from '@/lib/supabase-browser';
 
 type LogAction = 'product_create' | 'product_update' | 'product_delete' | 'bulk_upload';
+
+interface FieldChange {
+  field: string;
+  old: unknown;
+  new: unknown;
+}
 
 interface LogEntry {
   id: string;
@@ -15,10 +21,13 @@ interface LogEntry {
     category_id?: string;
     price?: number | null;
     stock?: number;
+    changes?: FieldChange[];
     inserted?: number;
     updated?: number;
     skipped?: number;
     failed?: number;
+    file_name?: string;
+    total_rows?: number;
   };
   created_at: string;
   user_id: string;
@@ -46,6 +55,26 @@ const ACTION_CONFIG: Record<LogAction, { label: string; icon: React.ReactNode; c
     color: 'text-amber-700 bg-amber-50 border-amber-200',
   },
 };
+
+const FIELD_LABELS: Record<string, string> = {
+  name_tr: 'Ad (TR)',
+  name_en: 'Ad (EN)',
+  brand: 'Marka',
+  price: 'Fiyat',
+  stock: 'Stok',
+  category_id: 'Kategori',
+  subcategory_id: 'Alt Kategori',
+  is_active: 'Durum',
+  image_url: 'Görsel URL',
+};
+
+function formatValue(field: string, value: unknown): string {
+  if (value === null || value === undefined || value === 'null') return '—';
+  if (field === 'price') return Number(value).toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' });
+  if (field === 'is_active') return value === true || value === 'true' ? 'Aktif' : 'Pasif';
+  if (field === 'image_url' && typeof value === 'string' && value.length > 40) return value.slice(0, 40) + '…';
+  return String(value);
+}
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleString('tr-TR', {
@@ -105,10 +134,10 @@ export default function LoglarPage() {
           <table className="w-full text-sm">
             <thead className="bg-surface-muted border-b border-border">
               <tr>
-                <th className="text-left px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle">Tarih</th>
-                <th className="text-left px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle">İşlem</th>
+                <th className="text-left px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle w-36">Tarih</th>
+                <th className="text-left px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle w-36">İşlem</th>
                 <th className="text-left px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle">Detay</th>
-                <th className="text-left px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle hidden md:table-cell">Kullanıcı</th>
+                <th className="text-left px-4 py-3 text-[11px] font-black tracking-[0.1em] uppercase text-text-subtle hidden md:table-cell w-28">Kullanıcı</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -119,7 +148,7 @@ export default function LoglarPage() {
                   color: 'text-text-muted bg-surface border-border',
                 };
                 return (
-                  <tr key={log.id} className="hover:bg-surface-muted transition-colors">
+                  <tr key={log.id} className="hover:bg-surface-muted transition-colors align-top">
                     <td className="px-4 py-3 text-text-muted text-xs whitespace-nowrap">
                       {formatDate(log.created_at)}
                     </td>
@@ -131,43 +160,82 @@ export default function LoglarPage() {
                     </td>
                     <td className="px-4 py-3">
                       {log.action === 'bulk_upload' ? (
-                        <div className="flex flex-wrap gap-3 text-xs text-text-muted">
-                          {log.meta.inserted != null && (
-                            <span className="text-green-700 font-semibold">+{log.meta.inserted} eklendi</span>
+                        <div className="space-y-1.5">
+                          {/* Dosya adı */}
+                          {log.meta.file_name && (
+                            <div className="flex items-center gap-1.5 text-xs text-primary font-semibold">
+                              <FileSpreadsheet size={12} className="text-text-subtle shrink-0" />
+                              {log.meta.file_name}
+                              {log.meta.total_rows != null && (
+                                <span className="text-text-muted font-normal">({log.meta.total_rows} satır)</span>
+                              )}
+                            </div>
                           )}
-                          {log.meta.updated != null && log.meta.updated > 0 && (
-                            <span className="text-blue-700 font-semibold">↻{log.meta.updated} güncellendi</span>
-                          )}
-                          {log.meta.skipped != null && log.meta.skipped > 0 && (
-                            <span className="text-text-muted">→{log.meta.skipped} atlandı</span>
-                          )}
-                          {log.meta.failed != null && log.meta.failed > 0 && (
-                            <span className="text-accent font-semibold">✗{log.meta.failed} başarısız</span>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="space-y-0.5">
-                          {log.meta.product_name && (
-                            <p className="font-semibold text-primary leading-snug">{log.meta.product_name}</p>
-                          )}
-                          <div className="flex flex-wrap gap-3 text-xs text-text-muted">
-                            {log.meta.brand && <span>{log.meta.brand}</span>}
-                            {log.meta.category_id && (
-                              <span className="font-mono">{log.meta.category_id}</span>
+                          {/* Sonuç özeti */}
+                          <div className="flex flex-wrap gap-3 text-xs">
+                            {log.meta.inserted != null && log.meta.inserted > 0 && (
+                              <span className="text-green-700 font-semibold">+{log.meta.inserted} eklendi</span>
                             )}
-                            {log.meta.price != null && (
-                              <span className="font-semibold text-primary">
-                                {log.meta.price.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}
-                              </span>
+                            {log.meta.updated != null && log.meta.updated > 0 && (
+                              <span className="text-blue-700 font-semibold">↻{log.meta.updated} güncellendi</span>
                             )}
-                            {log.meta.stock != null && (
-                              <span>Stok: {log.meta.stock}</span>
+                            {log.meta.skipped != null && log.meta.skipped > 0 && (
+                              <span className="text-text-muted">→{log.meta.skipped} atlandı</span>
+                            )}
+                            {log.meta.failed != null && log.meta.failed > 0 && (
+                              <span className="text-accent font-semibold">✗{log.meta.failed} başarısız</span>
                             )}
                           </div>
                         </div>
+                      ) : (
+                        <div className="space-y-1.5">
+                          {/* Ürün adı + temel bilgi */}
+                          <div className="space-y-0.5">
+                            {log.meta.product_name && (
+                              <p className="font-semibold text-primary leading-snug">{log.meta.product_name}</p>
+                            )}
+                            <div className="flex flex-wrap gap-3 text-xs text-text-muted">
+                              {log.meta.brand && <span>{log.meta.brand}</span>}
+                              {log.meta.category_id && (
+                                <span className="font-mono">{log.meta.category_id}</span>
+                              )}
+                              {log.action === 'product_create' && log.meta.price != null && (
+                                <span className="font-semibold text-primary">
+                                  {Number(log.meta.price).toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}
+                                </span>
+                              )}
+                              {log.action === 'product_create' && log.meta.stock != null && (
+                                <span>Stok: {log.meta.stock}</span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Değişiklik diff — sadece update'te */}
+                          {log.action === 'product_update' && log.meta.changes && log.meta.changes.length > 0 && (
+                            <div className="mt-1.5 space-y-1">
+                              {log.meta.changes.map((c) => (
+                                <div key={c.field} className="flex items-center gap-1.5 text-xs">
+                                  <span className="text-text-subtle font-medium w-20 shrink-0">
+                                    {FIELD_LABELS[c.field] ?? c.field}
+                                  </span>
+                                  <span className="px-1.5 py-0.5 bg-rose-50 text-rose-700 border border-rose-100 rounded-sm font-mono line-through">
+                                    {formatValue(c.field, c.old)}
+                                  </span>
+                                  <ArrowRight size={10} className="text-text-subtle shrink-0" />
+                                  <span className="px-1.5 py-0.5 bg-green-50 text-green-700 border border-green-100 rounded-sm font-mono">
+                                    {formatValue(c.field, c.new)}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          {log.action === 'product_update' && (!log.meta.changes || log.meta.changes.length === 0) && (
+                            <p className="text-xs text-text-subtle italic">Değişiklik yok</p>
+                          )}
+                        </div>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-text-subtle text-xs hidden md:table-cell truncate max-w-[180px] font-mono">
+                    <td className="px-4 py-3 text-text-subtle text-xs hidden md:table-cell font-mono">
                       {log.user_id.slice(0, 8)}…
                     </td>
                   </tr>

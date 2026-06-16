@@ -232,7 +232,7 @@ export default function TopluYuklePage() {
     const res = await fetch('/api/admin/products/bulk', {
       method: 'POST',
       headers: await getAuthHeaders(),
-      body: JSON.stringify({ rows: payload, duplicateMode }),
+      body: JSON.stringify({ rows: payload, duplicateMode, fileName }),
     });
     if (!res.ok) { setGlobalError('Sunucu hatası: ' + res.status); setUploading(false); return; }
     const results: BulkResult[] = await res.json();
