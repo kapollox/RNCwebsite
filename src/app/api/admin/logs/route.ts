@@ -18,3 +18,28 @@ export async function GET(req: NextRequest) {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
+
+export async function DELETE(req: NextRequest) {
+  const auth = await requireAdmin(req);
+  if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: 401 });
+
+  const body = await req.json().catch(() => ({})) as { ids?: string[] };
+
+  if (body.ids && body.ids.length > 0) {
+    // Seçili logları sil
+    const { error } = await supabaseAdmin
+      .from('admin_logs')
+      .delete()
+      .in('id', body.ids);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ deleted: body.ids.length });
+  }
+
+  // Tüm logları sil
+  const { error } = await supabaseAdmin
+    .from('admin_logs')
+    .delete()
+    .neq('id', '00000000-0000-0000-0000-000000000000'); // tümünü sil trick
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ deleted: 'all' });
+}
