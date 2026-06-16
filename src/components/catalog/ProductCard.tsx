@@ -8,8 +8,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import type { Product } from '@/types/product';
 
 function validImageUrl(url: string | null | undefined): string | null {
-  if (!url) return null;
-  if (url.includes('picsum.photos')) return null;
+  if (!url || !url.startsWith('http')) return null;
   return url;
 }
 

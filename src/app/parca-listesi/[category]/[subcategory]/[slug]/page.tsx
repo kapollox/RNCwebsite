@@ -15,8 +15,7 @@ import type { Product } from '@/types/product';
 type BreadcrumbMeta = { categoryName: string; categoryNameEn: string; subName: string; subNameEn: string } | null;
 
 function validImageUrl(url: string | null | undefined): string | null {
-  if (!url) return null;
-  if (url.includes('picsum.photos')) return null;
+  if (!url || !url.startsWith('http')) return null;
   return url;
 }
 
