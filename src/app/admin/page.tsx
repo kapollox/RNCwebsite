@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Pencil, Trash2, Package, AlertCircle, Filter } from 'lucide-react';
+import { Plus, Pencil, Trash2, Package, AlertCircle, Filter, Search, X } from 'lucide-react';
 import { adminFetchProducts, adminDeleteProduct } from '@/lib/admin-api';
 import type { Product } from '@/types/product';
 
@@ -15,6 +15,7 @@ export default function AdminPage() {
   const [error, setError] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [brandFilter, setBrandFilter] = useState('Tümü');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -33,13 +34,24 @@ export default function AdminPage() {
   const KNOWN_BRANDS = ['RKS Motor', 'Kuba Motor', 'Mondial', 'Arora', 'Yuki'];
 
   const filtered = useMemo(() => {
-    if (brandFilter === 'Tümü') return products;
-    if (brandFilter === 'Markasız') return products.filter((p) => !p.brand);
-    if (brandFilter === 'Diğer') return products.filter(
-      (p) => p.brand && !KNOWN_BRANDS.includes(p.brand)
-    );
-    return products.filter((p) => p.brand === brandFilter);
-  }, [products, brandFilter]);
+    let result = products;
+    if (brandFilter !== 'Tümü') {
+      if (brandFilter === 'Markasız') result = result.filter((p) => !p.brand);
+      else if (brandFilter === 'Diğer') result = result.filter((p) => p.brand && !KNOWN_BRANDS.includes(p.brand));
+      else result = result.filter((p) => p.brand === brandFilter);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      result = result.filter((p) =>
+        p.name_tr.toLowerCase().includes(q) ||
+        (p.name_en ?? '').toLowerCase().includes(q) ||
+        (p.brand ?? '').toLowerCase().includes(q) ||
+        (p.category_id ?? '').toLowerCase().includes(q) ||
+        (p.subcategory_id ?? '').toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [products, brandFilter, searchQuery]);
 
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`"${name}" silinsin mi?`)) return;
@@ -56,18 +68,39 @@ export default function AdminPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
         <div>
           <h1 className="font-display font-black text-2xl text-primary">Ürünler</h1>
           <p className="text-text-muted text-sm mt-1">{products.length} ürün</p>
         </div>
-        <Link
-          href="/admin/urun-ekle"
-          className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white text-sm font-semibold rounded-sm hover:bg-primary-dark transition-colors"
-        >
-          <Plus size={15} />
-          Ürün Ekle
-        </Link>
+        <div className="flex items-center gap-3 flex-wrap">
+          {/* Arama kutusu */}
+          <div className="relative">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-subtle pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Ürün adı, marka, kategori..."
+              className="pl-8 pr-8 py-2 text-sm bg-surface border border-border rounded-sm text-primary placeholder:text-text-subtle focus:outline-none focus:border-primary transition-colors w-64"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-subtle hover:text-primary transition-colors"
+              >
+                <X size={13} />
+              </button>
+            )}
+          </div>
+          <Link
+            href="/admin/urun-ekle"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-white text-sm font-semibold rounded-sm hover:bg-primary-dark transition-colors"
+          >
+            <Plus size={15} />
+            Ürün Ekle
+          </Link>
+        </div>
       </div>
 
       {error && (
@@ -113,6 +146,23 @@ export default function AdminPage() {
         </div>
       ) : (
         <div className="bg-surface border border-border rounded-sm overflow-hidden">
+          {filtered.length === 0 ? (
+            <div className="p-12 text-center">
+              <Search size={28} className="text-text-subtle mx-auto mb-3" />
+              <p className="text-text-muted text-sm font-semibold mb-1">Sonuç bulunamadı</p>
+              <p className="text-text-subtle text-xs">
+                {searchQuery ? `"${searchQuery}" için eşleşen ürün yok.` : 'Bu filtreye uyan ürün yok.'}
+              </p>
+              {(searchQuery || brandFilter !== 'Tümü') && (
+                <button
+                  onClick={() => { setSearchQuery(''); setBrandFilter('Tümü'); }}
+                  className="mt-4 text-xs text-accent hover:underline font-semibold"
+                >
+                  Filtreleri temizle
+                </button>
+              )}
+            </div>
+          ) : (
           <table className="w-full text-sm">
             <thead className="bg-surface-muted border-b border-border">
               <tr>
@@ -200,6 +250,7 @@ export default function AdminPage() {
               ))}
             </tbody>
           </table>
+          )}
         </div>
       )}
     </div>
