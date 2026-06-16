@@ -22,7 +22,6 @@ interface LogEntry {
   };
   created_at: string;
   user_id: string;
-  profiles: { email: string } | null;
 }
 
 const ACTION_CONFIG: Record<LogAction, { label: string; icon: React.ReactNode; color: string }> = {
@@ -168,8 +167,8 @@ export default function LoglarPage() {
                         </div>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-text-subtle text-xs hidden md:table-cell truncate max-w-[180px]">
-                      {log.profiles?.email ?? log.user_id.slice(0, 8) + '…'}
+                    <td className="px-4 py-3 text-text-subtle text-xs hidden md:table-cell truncate max-w-[180px] font-mono">
+                      {log.user_id.slice(0, 8)}…
                     </td>
                   </tr>
                 );
