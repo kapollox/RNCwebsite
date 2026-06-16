@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { requireAdmin } from '@/lib/admin-auth';
+import { writeLog } from '@/lib/admin-log';
 
 export async function GET(req: NextRequest) {
   const auth = await requireAdmin(req);
@@ -27,5 +28,14 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await writeLog(auth.userId!, 'product_create', {
+    product_name: data.name_tr,
+    brand: data.brand,
+    category_id: data.category_id,
+    price: data.price,
+    stock: data.stock,
+  });
+
   return NextResponse.json(data, { status: 201 });
 }

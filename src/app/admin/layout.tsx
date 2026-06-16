@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LayoutDashboard, Plus, LogOut, FolderTree, FileSpreadsheet, Loader2 } from 'lucide-react';
+import { LayoutDashboard, Plus, LogOut, FolderTree, FileSpreadsheet, Loader2, ClipboardList } from 'lucide-react';
 import { createSupabaseBrowser } from '@/lib/supabase-browser';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -58,6 +58,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: '/admin/urun-ekle',  label: 'Ürün Ekle',    icon: <Plus size={15} /> },
     { href: '/admin/kategoriler',label: 'Kategoriler',   icon: <FolderTree size={15} /> },
     { href: '/admin/toplu-yukle',label: 'Toplu Yükle',   icon: <FileSpreadsheet size={15} /> },
+    { href: '/admin/loglar',     label: 'İşlem Logları', icon: <ClipboardList size={15} /> },
   ];
 
   return (

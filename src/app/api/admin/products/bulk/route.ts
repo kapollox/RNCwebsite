@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { requireAdmin } from '@/lib/admin-auth';
+import { writeLog } from '@/lib/admin-log';
 
 function toSlug(text: string): string {
   return text
@@ -175,6 +176,18 @@ export async function POST(req: NextRequest) {
       results.push({ index: i, ok: true, action: 'inserted', product: productData });
     }
   }
+
+  const inserted = results.filter((r) => r.ok && r.action === 'inserted').length;
+  const updated  = results.filter((r) => r.ok && r.action === 'updated').length;
+  const skipped  = results.filter((r) => r.ok && r.action === 'skipped').length;
+  const failed   = results.filter((r) => !r.ok).length;
+
+  await writeLog(auth.userId!, 'bulk_upload', {
+    inserted,
+    updated,
+    skipped,
+    failed,
+  });
 
   return NextResponse.json(results);
 }

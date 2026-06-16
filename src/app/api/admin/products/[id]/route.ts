@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
 import { requireAdmin } from '@/lib/admin-auth';
+import { writeLog } from '@/lib/admin-log';
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const auth = await requireAdmin(req);
@@ -31,6 +32,15 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await writeLog(auth.userId!, 'product_update', {
+    product_name: data.name_tr,
+    brand: data.brand,
+    category_id: data.category_id,
+    price: data.price,
+    stock: data.stock,
+  });
+
   return NextResponse.json(data);
 }
 
@@ -39,11 +49,27 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
   if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: 401 });
 
   const { id } = await params;
+
+  // Silmeden önce ürün bilgilerini al (log için)
+  const { data: product } = await supabaseAdmin
+    .from('products')
+    .select('name_tr, brand, category_id, price')
+    .eq('id', id)
+    .single();
+
   const { error } = await supabaseAdmin
     .from('products')
     .delete()
     .eq('id', id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  await writeLog(auth.userId!, 'product_delete', {
+    product_name: product?.name_tr,
+    brand: product?.brand,
+    category_id: product?.category_id,
+    price: product?.price,
+  });
+
   return new NextResponse(null, { status: 204 });
 }
