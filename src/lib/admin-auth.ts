@@ -23,14 +23,12 @@ export async function requireAdmin(req: NextRequest): Promise<AuthResult> {
     return { ok: false, error: 'Token eksik' };
   }
 
-  // JWT'yi Supabase ile doğrula
   const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
 
   if (error || !user) {
     return { ok: false, error: 'Geçersiz veya süresi dolmuş token' };
   }
 
-  // Rol kontrolü
   const { data: profile } = await supabaseAdmin
     .from('profiles')
     .select('role')
