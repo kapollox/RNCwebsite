@@ -20,6 +20,37 @@ async function getAuthHeaders(): Promise<Record<string, string>> {
 }
 
 const KNOWN_BRANDS = ['RKS Motor', 'Kuba Motor', 'Mondial', 'Arora', 'Yuki'];
+
+// Her canonical marka için eşleştirilecek alias'lar (slug bazlı karşılaştırma)
+const BRAND_ALIASES: [canonical: string, aliases: string[]][] = [
+  ['RKS Motor', ['rks', 'rksmotor', 'rks-motor', 'rksmotor', 'rks123', 'rksmotors', 'rksmoto']],
+  ['Kuba Motor', ['kuba', 'kubamotor', 'kuba-motor', 'kubamoto']],
+  ['Mondial', ['mondial', 'mondıal', 'mondiel']],
+  ['Arora', ['arora', 'aro']],
+  ['Yuki', ['yuki', 'yukı']],
+];
+
+function normalizeBrand(raw: string): string {
+  if (!raw?.trim()) return raw;
+  const normalized = raw.trim()
+    .toLowerCase()
+    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+    .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]/g, '');
+  for (const [canonical, aliases] of BRAND_ALIASES) {
+    const canonicalSlug = canonical.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (normalized === canonicalSlug || aliases.includes(normalized)) {
+      return canonical;
+    }
+  }
+  // Bilinen markalarla başlıyor mu? (rksmotor2024 → RKS Motor)
+  for (const [canonical, aliases] of BRAND_ALIASES) {
+    if (aliases.some((a) => normalized.startsWith(a))) return canonical;
+    const canonicalSlug = canonical.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (normalized.startsWith(canonicalSlug)) return canonical;
+  }
+  return raw.trim();
+}
 const COLUMNS = [
   'brand', 'name_tr', 'name_en', 'category', 'subcategory',
   'price', 'stock', 'description_tr', 'description_en', 'image_url',
@@ -39,8 +70,10 @@ interface ValidatedRow extends RawRow {
   _errors: string[];
   _valid: boolean;
   _index: number;
-  _resolvedCatId: string | null;   // çözümlenmiş kategori slug
+  _resolvedCatId: string | null;
   _resolvedSubId: string | null;
+  _normalizedBrand: string;        // normalizasyon sonrası marka adı
+  _brandChanged: boolean;          // marka düzeltildiyse true
 }
 
 function toSlug(text: string): string {
@@ -69,6 +102,9 @@ function validateRow(row: RawRow, index: number, cats: CatRef[], subs: SubRef[])
   if (!row.name_tr?.trim()) errors.push('name_tr zorunlu');
   if (!row.brand?.trim()) errors.push('brand zorunlu');
 
+  const normalizedBrand = normalizeBrand(row.brand);
+  const brandChanged = normalizedBrand !== row.brand?.trim();
+
   const cat = resolveCat(row.category, cats);
   if (!row.category?.trim()) {
     errors.push('category zorunlu');
@@ -87,11 +123,14 @@ function validateRow(row: RawRow, index: number, cats: CatRef[], subs: SubRef[])
 
   return {
     ...row,
+    brand: normalizedBrand,
     _errors: errors,
     _valid: errors.length === 0,
     _index: index,
     _resolvedCatId: cat?.id ?? null,
     _resolvedSubId: sub?.id ?? null,
+    _normalizedBrand: normalizedBrand,
+    _brandChanged: brandChanged,
   };
 }
 
@@ -434,7 +473,17 @@ export default function TopluYuklePage() {
                             }
                           </td>
                           <td className="px-3 py-2 font-semibold text-primary whitespace-nowrap">
-                            {row.brand || <span className="text-accent">—</span>}
+                            {row._normalizedBrand
+                              ? <>
+                                  {row._normalizedBrand}
+                                  {row._brandChanged && (
+                                    <span className="ml-1 text-[9px] font-black tracking-wide bg-amber-100 text-amber-700 border border-amber-200 px-1 py-0.5 rounded-sm uppercase">
+                                      düzeltildi
+                                    </span>
+                                  )}
+                                </>
+                              : <span className="text-accent">—</span>
+                            }
                           </td>
                           <td className="px-3 py-2 text-primary max-w-[180px] truncate">
                             {row.name_tr || <span className="text-accent">—</span>}

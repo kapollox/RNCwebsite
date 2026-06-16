@@ -10,6 +10,35 @@ function toSlug(text: string): string {
     .replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
 }
 
+const BRAND_ALIASES: [canonical: string, aliases: string[]][] = [
+  ['RKS Motor', ['rks', 'rksmotor', 'rks-motor', 'rksmotor', 'rks123', 'rksmotors', 'rksmoto']],
+  ['Kuba Motor', ['kuba', 'kubamotor', 'kuba-motor', 'kubamoto']],
+  ['Mondial', ['mondial', 'mondıal', 'mondiel']],
+  ['Arora', ['arora', 'aro']],
+  ['Yuki', ['yuki', 'yukı']],
+];
+
+function normalizeBrand(raw: string): string {
+  if (!raw?.trim()) return raw;
+  const normalized = raw.trim()
+    .toLowerCase()
+    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+    .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]/g, '');
+  for (const [canonical, aliases] of BRAND_ALIASES) {
+    const canonicalSlug = canonical.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (normalized === canonicalSlug || aliases.includes(normalized)) {
+      return canonical;
+    }
+  }
+  for (const [canonical, aliases] of BRAND_ALIASES) {
+    if (aliases.some((a) => normalized.startsWith(a))) return canonical;
+    const canonicalSlug = canonical.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (normalized.startsWith(canonicalSlug)) return canonical;
+  }
+  return raw.trim();
+}
+
 export type DuplicateMode = 'update' | 'skip' | 'error';
 
 export interface BulkRow {
@@ -100,7 +129,7 @@ export async function POST(req: NextRequest) {
       name_tr: row.name_tr.trim(),
       name_en: row.name_en?.trim() || row.name_tr.trim(),
       slug,
-      brand: row.brand?.trim() || null,
+      brand: row.brand?.trim() ? normalizeBrand(row.brand) : null,
       category_id: categoryId,
       subcategory_id: subcategoryId,
       price: row.price ? parseFloat(row.price) : null,
