@@ -51,3 +51,13 @@ export async function adminDeleteProduct(id: string) {
   });
   if (!res.ok) throw new Error('Ürün silinemedi');
 }
+
+export async function adminBulkDeleteProducts(ids: string[]) {
+  const res = await fetch('/api/admin/products', {
+    method: 'DELETE',
+    headers: await getAuthHeaders(),
+    body: JSON.stringify({ ids }),
+  });
+  if (!res.ok) throw new Error('Toplu silme başarısız');
+  return res.json();
+}
