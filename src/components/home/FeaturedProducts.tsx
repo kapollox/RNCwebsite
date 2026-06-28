@@ -1,6 +1,12 @@
-import { supabase as supabaseAdmin } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 import { FeaturedProductsClient } from './FeaturedProductsClient';
 import type { Product } from '@/types/product';
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  { global: { fetch: (url, opts) => fetch(url, { ...opts, cache: 'no-store' }) } }
+);
 
 export async function FeaturedProducts() {
   const { data } = await supabaseAdmin
